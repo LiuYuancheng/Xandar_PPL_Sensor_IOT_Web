@@ -1,12 +1,14 @@
-<html>
-    <head>
-        {% if title %}
-        <title>{{ title }} - Microblog</title>
-        {% else %}
-        <title>Welcome to Microblog!</title>
-        {% endif %}
-    </head>
-    <body>
-        <h1>Hello, {{ user.username }}!</h1>
-    </body>
-</html>
+<!–– inheritance from the base.html page -->
+{% extends "base.html" %}
+
+{% block indexPage %}
+    <h1>Hi, {{ user.username }}!</h1>
+    {% if title %}
+    {% for post in posts %}
+    <div>
+        <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
+    </div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}
+
