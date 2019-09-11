@@ -85,4 +85,6 @@ class LoginForm(FlaskForm):
 
 
 if __name__ == '__main__':
+    print('Start the web server.')
     application.run(debug=True, threaded=True)
+    print('Finished')
