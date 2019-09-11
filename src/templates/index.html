@@ -1,14 +1,8 @@
-<!–– inheritance from the base.html page -->
 {% extends "base.html" %}
 
-{% block indexPage %}
+{% block content %}
     <h1>Hi, {{ user.username }}!</h1>
-    {% if title %}
     {% for post in posts %}
-    <div>
-        <p>{{ post.author.username }} says: <b>{{ post.body }}</b></p>
-    </div>
+    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
     {% endfor %}
-    {% endif %}
 {% endblock %}
-
