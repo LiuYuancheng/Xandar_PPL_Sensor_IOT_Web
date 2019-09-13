@@ -81,7 +81,8 @@ def chart_data():
         while True:
             json_data = json.dumps(
                 {'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': gv.iCommReader.readComm() })
-            yield f"data:{json_data}\n\n"
+            #print(f"data:{json_data}\n\n")
+            yield "data:"+json_data+"\n\n"
             time.sleep(1)
 
     return Response(generate_random_data(), mimetype='text/event-stream')
@@ -95,6 +96,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 DE_COMM = 'COM3' if platform.system() == 'Windows' else '/dev/ttyUSB0'
+
 class SensorCom(object):
     """ Interface to store the PLC information and control the PLC through 
         by hooking to the ModBus(TCPIP).
