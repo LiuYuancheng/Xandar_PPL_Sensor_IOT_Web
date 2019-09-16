@@ -19,10 +19,9 @@ import platform
 from struct import unpack
 from datetime import datetime
 from functools import partial
-
+# import flask module to create the server.
 from flask import Flask, render_template, flash, redirect, Response
 from testPGlobal import Config
-
 from flask_wtf import FlaskForm # pip install flask-wtf
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
@@ -30,10 +29,12 @@ from wtforms.validators import DataRequired
 import testPGlobal as gv
 from testPGlobal import Config
 
+DE_COMM = 'COM3' if platform.system() == 'Windows' else '/dev/ttyUSB0'
 
 application = Flask(__name__)
 application.config.from_object(Config)
 
+#-----------------------------------------------------------------------------
 @application.route('/')
 @application.route('/index')
 def index():
@@ -43,20 +44,11 @@ def index():
             'author': {'username': 'John'},
             'body': 'Beautiful day in Portland!'
         },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        },
-        {
-            'author': {'username': 'error'},
-            'body': 'The Avengers movie was so cool!'
-        }
-
     ]
 
     return render_template('index.html', title='Sign in', user=user, posts=posts)
 
-
+#-----------------------------------------------------------------------------
 @application.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -71,6 +63,7 @@ def login():
 
     return render_template('login.html', title='Sign In', form=form)
 
+#-----------------------------------------------------------------------------
 @application.route('/chart')
 def chart():
     return render_template('chart.html')
@@ -87,6 +80,7 @@ def chart_data():
 
     return Response(generate_random_data(), mimetype='text/event-stream')
 
+#-----------------------------------------------------------------------------
 class LoginForm(FlaskForm):
     """ From to handle the login.
     """
@@ -95,8 +89,10 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
-DE_COMM = 'COM3' if platform.system() == 'Windows' else '/dev/ttyUSB0'
 
+
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 class SensorCom(object):
     """ Interface to store the PLC information and control the PLC through 
         by hooking to the ModBus(TCPIP).
@@ -142,6 +138,7 @@ class SensorCom(object):
             print("Serial connection: serial port open error.")
             return None
 
+#-----------------------------------------------------------------------------
     def readComm(self):
         if self.serComm is None: 
             print ("Serial readeing: The sensor is not connected.")
@@ -164,8 +161,11 @@ class SensorCom(object):
         return self.dataList[4]
 
 
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 if __name__ == '__main__':
     gv.iCommReader = SensorCom(None)
     print('Start the web server.')
     application.run(debug=False, threaded=True)
+    # application.run(host= "0.0.0.0", debug=False, threaded=True) # use 0.0.0.0 if we want access the web from other computer.
     print('Finished')
