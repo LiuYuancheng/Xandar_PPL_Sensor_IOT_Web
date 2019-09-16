@@ -38,11 +38,11 @@ application.config.from_object(Config)
 @application.route('/')
 @application.route('/index')
 def index():
-    user = {'username' : 'test'}
+    user = {'username' : 'Welcome to access the XAKA people counting sensor.'}
     posts = [
         {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
+            'author': {'username': 'new user'},
+            'body': 'The user has not logged in yet.'
         },
     ]
 
