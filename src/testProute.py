@@ -68,7 +68,7 @@ def login():
 def chart():
     return render_template('chart.html')
 
-@application.route('/chart-data')
+@application.route('/chart-data') # the route component must match the related <dev> in the html file.
 def chart_data():
     def generate_random_data():
         while True:
@@ -88,8 +88,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
-
-
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
