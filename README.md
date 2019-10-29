@@ -3,7 +3,7 @@
 
 This project will create a simple web server to provide the history chart to show the Xandar Kardian(
 
-[XAKA]: 	"Xandar Kardian"
+[XAKA]: http://xandar.com/people-counting/	"Xandar Kardian"
 
 ) People counting sensor data.  So when the engineer are install the sensor with the IOT gateway. They don't need to use the computer to connect to the sensor directly to check the sensor state. They can login in the web sever running in the  IOT gateway to finish the job.
 
