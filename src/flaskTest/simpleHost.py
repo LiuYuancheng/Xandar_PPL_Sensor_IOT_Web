@@ -39,8 +39,10 @@ def hello_name():
     """ handle the user input.
     """
     if request.method == 'POST':
-        score = int(request.form['nm'])
-        return render_template('result.html', marks = score)
+        #score = int(request.form['nm'])
+        #dict = {'phy':50,'che':60,'maths':70}
+        result = request.form
+        return render_template('result.html', marks = 12, result = result)
 
 if __name__ == '__main__':
    app.run(host= "0.0.0.0", debug=True, threaded=True)

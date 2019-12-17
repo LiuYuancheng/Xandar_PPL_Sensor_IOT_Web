@@ -1,9 +1,14 @@
 <html>
+   <head>
+      <script type = "text/javascript" 
+         src = "{{ url_for('static', filename = 'test.js') }}" ></script>
+   </head>
+   
     <body>
         <form action = "http://localhost:5000/login" method = "get">
            <p><h5>Enter Name:</h5></p>
            <p><input type = "text" name = "nm" /></p>
-           <p><input type = "submit" value = "submit" /></p>
+           <p><input type = "submit" onclick = "sayHello()" value = "submit" /></p>
         </form>
      </body>
 </html>
