@@ -1,6 +1,11 @@
-from flask import Flask, redirect, url_for, request
+from flask import Flask, redirect, url_for, request, render_template
 
 app = Flask(__name__)
+
+
+@app.route('/')
+def index():
+    return render_template('login.html')
 
 @app.route('/admin')
 def hello_admin():
@@ -8,7 +13,8 @@ def hello_admin():
 
 @app.route('/guest/<name>')
 def hello_guest(name):
-    return 'Hello %s as a guest' %name
+    return render_template('guest.html', name=name)
+    #return 'Hello %s as a guest' %name
 
 @app.route('/success/<name>')
 def hello_world(name):
@@ -20,11 +26,21 @@ def hello_world(name):
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
     if request.method == 'POST':
+        # handle the post method.
         user = request.form['nm']
         return redirect(url_for('hello_world', name=user))
-    else:
+    elif request.method == 'GET':
+        # handle the get method.
         user = request.args.get('nm')
         return redirect(url_for('hello_world', name=user))
+
+@app.route('/guest', methods = ['POST', 'GET'])
+def hello_name():
+    """ handle the user input.
+    """
+    if request.method == 'POST':
+        score = int(request.form['nm'])
+        return render_template('result.html', marks = score)
 
 if __name__ == '__main__':
    app.run(host= "0.0.0.0", debug=True, threaded=True)
