@@ -1,10 +1,11 @@
 <html>
    <head>
       <script type = "text/javascript" 
-         src = "{{ url_for('static', filename = 'test.js') }}" ></script>
+         src = "{{ url_for('static/js', filename = 'test.js') }}" ></script>
    </head>
-   
-    <body>
+
+   <body style="background:url({{'static/images/'+commPageData.background_image}});">
+
         <form action = "http://localhost:5000/login" method = "get">
            <p><h5>Enter Name:</h5></p>
            <p><input type = "text" name = "nm" /></p>
