@@ -2,8 +2,8 @@
 #-----------------------------------------------------------------------------
 # Name:        attackHost.py [python2.7/python3]
 #
-# Purpose:     This module is used to create a flask http server on port 5000 
-#              to send the gateway control cmd
+# Purpose:     This module is used to create a flask server to do the firmware
+#              upload and attestation.
 # Author:      Yuancheng Liu
 #
 # Created:     2020/01/29
