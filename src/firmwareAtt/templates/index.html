@@ -1,0 +1,87 @@
+<?xml version="1.0" encording="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+    <title>Gateway control page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body style="background-color: #212124;">
+<table>
+    <tr>
+        <!--<td><a href=# id=enableEncrypt><button class="btn success">Enable Encryption </button></a></td>
+        <td><a href=# id=disableEncrypt><button class="btn danger">Disable Encryption</button></a></td>
+        -->
+        <td >
+            <img src="../static/images/logoSingtel.png" alt="Girl in a jacket" style="width:160px;height:40px;">
+        </td>
+        
+        <td>
+            <font color=#A0A0A0> <strong>Control Panel </strong></font>
+        </td>
+        <td> </td>
+        <td>
+            <input type="checkbox" id="myCheck"  onclick="cbFunction()" checked> <font color=#A0A0A0> Enable Gateway Encryption </font>
+        </td>
+
+        <td>
+            <a href=# id=exchangeKey><button class="btn info">Refresh Key</button></a>
+        </td>
+    </tr>
+
+</table>
+<p id="text" style="display:none">Checkbox is CHECKED!</p>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+    $(function() {
+        // Enable encryption.
+        $('a#enableEncrypt').bind('click', function() {
+        $.getJSON('/enableEncrypt',
+            function(data) {
+            //do nothing
+        });
+        return false;
+        });
+        // Disable encryption
+        $('a#disableEncrypt').bind('click', function() {
+        $.getJSON('/disableEncrypt',
+            function(data) {
+            //do nothing
+        });
+        return false;
+        });
+        // exchange key
+        $('a#exchangeKey').bind('click', function() {
+        $.getJSON('/exchangeKey',
+            function(data) {
+            //do nothing
+        });
+        return false;
+        });
+    });
+
+    function cbFunction() {
+    var checkBox = document.getElementById("myCheck");
+    var text = document.getElementById("text");
+    if (checkBox.checked == true){
+        text.style.display = "block";
+        $.getJSON('/enableEncrypt',
+            function(data) {
+            //do nothing
+        });
+    } else {
+        text.style.display = "none";
+        $.getJSON('/disableEncrypt',
+            function(data) {
+            //do nothing
+        });
+        }
+    }
+
+
+</script>
+</body>
+
+</html>
