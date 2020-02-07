@@ -10,13 +10,21 @@
 # Copyright:   YC @ Singtel Cyber Security Research & Development Laboratory
 # License:     YC
 #-----------------------------------------------------------------------------
+import os
 import socket
 from flask import Flask, redirect, url_for, request, render_template
 
-TEST_MODE = True # Test mode flag - True: test on local computer
 
+TEST_MODE = True # Test mode flag - True: test on local computer
 SEV_IP = ('127.0.0.1', 5006) if TEST_MODE else ('192.168.10.244', 5006)
 BUFFER_SZ = 1024
+
+ALLOWED_EXTENSIONS = set(['bin'])
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 
 # Init the UDP send server
 crtClient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -61,6 +69,30 @@ def startAtt2():
         msg = 'T;2'
         crtClient.sendto(msg.encode('utf-8'), SEV_IP)
     return ("nothing")
+
+
+@app.route('/', methods=['POST'])
+def upload_file():
+    """ https://www.roytuts.com/python-flask-file-upload-example/
+    """
+	if request.method == 'POST':
+        # check if the post request has the file part
+		if 'file' not in request.files:
+			flash('No file part')
+			return redirect(request.url)
+		file = request.files['file']
+		if file.filename == '':
+			flash('No file selected for uploading')
+			return redirect(request.url)
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			flash('File successfully uploaded')
+			return redirect('/')
+		else:
+			flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
+			return redirect(request.url)
+
 
 if __name__ == '__main__':
     app.run(host= "0.0.0.0", debug=False, threaded=True)
