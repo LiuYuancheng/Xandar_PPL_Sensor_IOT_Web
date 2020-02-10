@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #-----------------------------------------------------------------------------
-# Name:        telloSensor.py
+# Name:        SensorPatt.py
 #
 # Purpose:     This module is used to create a tcp communication server to receive 
 #              the Arduino_ESP8266 height data and do the PATT attestation. 
@@ -18,11 +18,11 @@ import socket
 import threading
 
 from datetime import datetime
-import telloGlobal as gv
+SE_IP = ('0.0.0.0', 4000)       # Sensor server IP
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
-class telloSensor(threading.Thread):
+class SensorPatt(threading.Thread):
     """ TCP server thread.""" 
     def __init__(self, threadID, name, clientMax):
         threading.Thread.__init__(self)
@@ -41,32 +41,25 @@ class telloSensor(threading.Thread):
         except:
             print("telloSensor  : TCP socket server init error.")
             exit()
-            raise
         
 #-----------------------------------------------------------------------------
     def run(self):
         """ main loop to communicate with the clients.(overwirte thread.run())"""
         while not self.terminate:
             self.conn, addr = self.sock.accept()
-            if gv.iMainFrame: gv.iMainFrame.updateSenConn(True, self.terminate) # YC: if not add termiate the program will hand when stop. why ? 
             print('Connection address:'+str(addr))
             while not self.terminate:
                 if self.iterTime > 0:
-                    if gv.iSensorPanel: gv.iSensorPanel.updateInfo(iterN=self.attitude)
                     self.checkSumfh = open("checkSumRecord.txt", 'a')
                     self.checkSumfh.write("checksum record [%s]: \n" %str(datetime.today()))
                     self.getCheckSum(self.blockNum)
                     self.checkSumfh.close()
                 else:
                     self.attitude = self.getDistance()
-                    if not self.attitude: break # client send Null and want to break the connection.
-                    if gv.iSensorPanel: 
-                        print("Sensor feedback data: %s" %str(self.attitude))
-                        gv.iSensorPanel.updateInfo(alti=self.attitude)
-                        if self.stated == 'unsafe':
-                            gv.iSensorPanel.updateInfo(alti='1000')
-
-            if gv.iMainFrame: gv.iMainFrame.updateSenConn(False, self.terminate)
+                    if not self.attitude:
+                        print()
+                        
+                        break # client send Null and want to break the connection.
             print("Sensor disconnected.")
         self.sock.close()
         print("TCP server terminat.")
@@ -88,17 +81,12 @@ class telloSensor(threading.Thread):
         """ Get the local firmware checkSum and the sensor feed back checkSum."""
         # Get the random memory address.
         s_b_and_s_w = self._generate_sb_and_sw()
-        seedVal = "Sb: %s, Sw %s" % (
-            hex(s_b_and_s_w[0]), hex(s_b_and_s_w[1]))
-        #print("telloSensor  : seed val: %s" % seed_value)
-        if gv.iSensorPanel: gv.iSensorPanel.updateInfo(sead=seedVal)
         rhos = self._generate_random_block_select_list(
             s_b_and_s_w[0], s_b_and_s_w[1], number_of_blocks)
         address_list = self._generate_all_address(
             s_b_and_s_w[1], rhos, number_of_blocks)
         # Get the firmware from the local pre-saved firmware.
         verifier_checksum = self._calculate_sigma_star(address_list)
-        if gv.iSensorPanel:  gv.iSensorPanel.updateChecksum(local=verifier_checksum)
         print("telloSensor : verifier check sum %s" %
               str(verifier_checksum))
         # Connect to the sensor to get the firmware check sum.
@@ -110,12 +98,10 @@ class telloSensor(threading.Thread):
         self.checkSumfh.write(str(sensor_checksum) + "\n")
         if str(verifier_checksum) != str(sensor_checksum):
             print("The check sum are different.")
-            gv.iMainFrame.updateSenDis(False)
             self.stated = 'unsafe'
             self.iterTime = 0 # stop iteration if the attesation find unsafe.
         else:
             print("The check sum are same.")
-            gv.iMainFrame.updateSenDis(True)
             self.stated = 'safe'
             self.iterTime -= 1 # decrease the iteration time for the next around.
 
@@ -133,11 +119,6 @@ class telloSensor(threading.Thread):
                 ch, self.attitude = data.split(',')
                 # print("Feed back checksum: %s" %str((ch)))
                 sigma += ch.upper()
-                # Update the display area.
-                if gv.iSensorPanel: 
-                    gv.iSensorPanel.updateChecksum(remote=ch.upper())
-                    gv.iSensorPanel.updateInfo(iterN = self.iterTime, alti=self.attitude, timeU = str(time.time()-timeU))
-                    gv.iSensorPanel.updateProgress(64, listLen)
         return sigma
 
 #-----------------------------------------------------------------------------
