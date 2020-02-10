@@ -12,25 +12,54 @@
 #-----------------------------------------------------------------------------
 import os
 import socket
-from flask import Flask, redirect, url_for, request, render_template
-
+from flask import Flask, redirect, url_for, request, flash, render_template
+from werkzeug.utils import secure_filename
 
 TEST_MODE = True # Test mode flag - True: test on local computer
 SEV_IP = ('127.0.0.1', 5006) if TEST_MODE else ('192.168.10.244', 5006)
 BUFFER_SZ = 1024
-
-ALLOWED_EXTENSIONS = set(['bin'])
-
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
+UPLOAD_FOLDER = os.getcwd()
 
 # Init the UDP send server
 crtClient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# Init the flask web server program.
+class webHandler(object):
+    """ handler class to handle differetn web function.""" 
+    def __init__(self, parent):
+        self.parent = parent
+        self.extenction = ('bin')
+
+    def allowed_file(self, filename):
+	    return '.' in filename and filename.split('.')[-1].lower() in self.extenction
+
+    def fileUpload(self, request):
+        
+        if 'file' not in request.files:
+            flash('No file part')
+            return request.url
+        fh = request.files['file']
+        if fh.filename == '':
+            flash('No file selected for uploading')
+            return request.url
+        elif fh and self.allowed_file(fh.filename):
+            filename = secure_filename(fh.filename)
+            fh.save(os.path.join(self.parent.config['UPLOAD_FOLDER'], filename))
+            print("xxxxxxxxxxx")
+            flash('File successfully uploaded')
+            return '/'
+        else:
+            flash('Allowed file types are bin')
+            return request.url
+
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
+
+# Init the flask web server program and rout the function.
 app = Flask(__name__)
+app.secret_key = "secret key"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+routeHandler = webHandler(app)
 
 @app.route('/')
 def index():
@@ -70,28 +99,13 @@ def startAtt2():
         crtClient.sendto(msg.encode('utf-8'), SEV_IP)
     return ("nothing")
 
-
 @app.route('/', methods=['POST'])
 def upload_file():
     """ https://www.roytuts.com/python-flask-file-upload-example/
     """
-	if request.method == 'POST':
-        # check if the post request has the file part
-		if 'file' not in request.files:
-			flash('No file part')
-			return redirect(request.url)
-		file = request.files['file']
-		if file.filename == '':
-			flash('No file selected for uploading')
-			return redirect(request.url)
-		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			flash('File successfully uploaded')
-			return redirect('/')
-		else:
-			flash('Allowed file types are txt, pdf, png, jpg, jpeg, gif')
-			return redirect(request.url)
+    if request.method == 'POST':
+    # check if the post request has the file part 
+        return redirect(routeHandler.fileUpload(request))
 
 
 if __name__ == '__main__':
