@@ -49,7 +49,7 @@ class webHandler(object):
             return request.url
         elif fh and self.allowed_file(fh.filename):
             filename = secure_filename(fh.filename)
-            fh.save(os.path.join(self.parent.config['UPLOAD_FOLDER'], filename))
+            fh.save(gv.FM_FILE)
             flash('File successfully uploaded')
             return '/'
         else:
@@ -114,7 +114,7 @@ def upload_file():
     """
     if request.method == 'POST':
     # check if the post request has the file part 
-        return redirect(gv.routeHandler.fileUpload(request))
+        return redirect(gv.iRouteHandler.fileUpload(request))
 
 @app.route('/progress')
 def progress():
