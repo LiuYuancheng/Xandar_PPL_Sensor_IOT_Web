@@ -18,14 +18,15 @@ import socket
 import threading
 
 from datetime import datetime
-SE_IP = ('0.0.0.0', 4000)       # Sensor server IP
+import globalVal as gv
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 class SensorPatt(threading.Thread):
     """ TCP server thread.""" 
-    def __init__(self, threadID, name, clientMax):
+    def __init__(self, parent, threadID, name, clientMax):
         threading.Thread.__init__(self)
+        self.parent = parent
         self.terminate = False
         self.attitude = None            # sensor reading.
         self.checkSumfh = None          # filehandler to record the checksum.

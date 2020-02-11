@@ -11,9 +11,13 @@
 # License:     YC
 #-----------------------------------------------------------------------------
 import os
+import time
 import socket
-from flask import Flask, redirect, url_for, request, flash, render_template
+from flask import Flask, redirect, url_for, request, flash, render_template, Response
 from werkzeug.utils import secure_filename
+
+import globalVal as gv
+import sensorPatt as sp
 
 TEST_MODE = True # Test mode flag - True: test on local computer
 SEV_IP = ('127.0.0.1', 5006) if TEST_MODE else ('192.168.10.244', 5006)
@@ -44,7 +48,6 @@ class webHandler(object):
         elif fh and self.allowed_file(fh.filename):
             filename = secure_filename(fh.filename)
             fh.save(os.path.join(self.parent.config['UPLOAD_FOLDER'], filename))
-            print("xxxxxxxxxxx")
             flash('File successfully uploaded')
             return '/'
         else:
@@ -59,7 +62,9 @@ app = Flask(__name__)
 app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-routeHandler = webHandler(app)
+gv.iRouteHandler = webHandler(app)
+gv.iSensorThread = sp.SensorPatt(app, 0, "Arduino_ESP8266", 1)
+gv.iSensorThread.start()
 
 @app.route('/')
 def index():
@@ -105,7 +110,25 @@ def upload_file():
     """
     if request.method == 'POST':
     # check if the post request has the file part 
-        return redirect(routeHandler.fileUpload(request))
+        return redirect(gv.routeHandler.fileUpload(request))
+
+@app.route('/progress')
+def progress():
+	def generate():
+		x = 0
+		while x <= 100:
+			yield "data:" + str(x) + "\n\n"
+			x = x + 10
+			time.sleep(0.5)
+	return Response(generate(), mimetype= 'text/event-stream')
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
