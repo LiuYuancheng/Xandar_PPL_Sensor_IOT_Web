@@ -11,10 +11,12 @@
 # License:     YC
 #-----------------------------------------------------------------------------
 import os
+import random
 import time
 import socket
-from flask import Flask, redirect, url_for, request, flash, render_template, Response
+from flask import Flask, redirect, url_for, request, flash, render_template, Response, jsonify
 from werkzeug.utils import secure_filename
+
 
 import globalVal as gv
 import sensorPatt as sp
@@ -104,6 +106,8 @@ def startAtt2():
         crtClient.sendto(msg.encode('utf-8'), SEV_IP)
     return ("nothing")
 
+
+
 @app.route('/', methods=['POST'])
 def upload_file():
     """ https://www.roytuts.com/python-flask-file-upload-example/
@@ -121,13 +125,6 @@ def progress():
 			x = x + 10
 			time.sleep(0.5)
 	return Response(generate(), mimetype= 'text/event-stream')
-
-
-
-
-
-
-
 
 
 

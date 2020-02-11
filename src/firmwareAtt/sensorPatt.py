@@ -42,6 +42,7 @@ class SensorPatt(threading.Thread):
         except:
             print("telloSensor  : TCP socket server init error.")
             exit()
+        print("sensor connection thread init finished.")
         
 #-----------------------------------------------------------------------------
     def run(self):
