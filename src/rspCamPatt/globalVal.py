@@ -14,7 +14,9 @@ import os
 dirpath = os.getcwd()
 print("testProute: Current working directory is : %s" %dirpath)
 
-FIRM_FILE = os.path.join(dirpath,  "my_video.h264")
+CLFM_FILE = os.path.join(dirpath,  "my_video.h264")
+SEFM_FILE = os.path.join(dirpath,  "my_video.h264")
+
 
 #-------<GLOBAL PARAMTERS>-----------------------------------------------------
 SE_IP = ('0.0.0.0', 4000)       # Sensor server IP

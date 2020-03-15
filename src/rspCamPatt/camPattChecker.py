@@ -46,30 +46,30 @@ class SensorPatt(object):
         address_list = self._generate_all_address(
             s_b_and_s_w[1], rhos, number_of_blocks)
         # Get the firmware from the local pre-saved firmware.
-        verifier_checksum = self._calculate_sigma_star(address_list)
+        verifier_checksum = self._calculate_sigma_star(address_list, gv.SEFM_FILE)
         print("telloSensor : verifier check sum %s" %
               str(verifier_checksum))
         # Connect to the sensor to get the firmware check sum.
-        sensor_checksum = self._calculate_sigma_star(address_list)
+        sensor_checksum = self._calculate_sigma_star(address_list, gv.CLFM_FILE)
         print("telloSensor : sensor check sum %s" %
               str(verifier_checksum))
 
         #self.checkSumfh.write(str(verifier_checksum)+"\n")
         #self.checkSumfh.write(str(sensor_checksum) + "\n")
         if str(verifier_checksum) != str(sensor_checksum):
-            print("The check sum are different.")
+            print("The check sum are different. Attestaion Failed.")
             self.stated = 'unsafe'
             self.iterTime = 0 # stop iteration if the attesation find unsafe.
         else:
-            print("The check sum are same.")
+            print("The check sum are same. Attestation successful.")
             self.stated = 'safe'
             self.iterTime -= 1 # decrease the iteration time for the next around.
 
 #-----------------------------------------------------------------------------
-    def _calculate_sigma_star(self, address_list):
+    def _calculate_sigma_star(self, address_list, firmwFile):
         """ Load the local firmware sample and calculate the PATT check sum."""
         sigma_star = ""
-        with open(gv.FIRM_FILE, "rb") as fh:
+        with open(firmwFile, "rb") as fh:
             bytesData = fh.read()
             for address in address_list:
                 sigma_star = sigma_star + bytesData[address:address+1].hex()
