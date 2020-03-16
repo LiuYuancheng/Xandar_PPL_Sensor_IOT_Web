@@ -1,13 +1,12 @@
 #!/usr/bin/python
 #-----------------------------------------------------------------------------
-# Name:        SensorPatt.py
+# Name:        camPATTChecker.py
 #
-# Purpose:     This module is used to create a tcp communication server to receive 
-#              the Arduino_ESP8266 height data and do the PATT attestation. 
+# Purpose:     This module will create a camera firmware PATT checking function
 #              
 # Author:       Yuancheng Liu
 #
-# Created:     2019/10/04
+# Created:     2020/03/16
 # Copyright:   YC @ Singtel Cyber Security Research & Development Laboratory
 # License:     YC
 #-----------------------------------------------------------------------------
@@ -20,23 +19,19 @@ import threading
 from datetime import datetime
 import globalVal as gv
 
-
-
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
-class SensorPatt(object):
+class camPATTChecker(object):
     """ TCP server thread.""" 
     def __init__(self, parent):
-        self.terminate = False
-        self.attitude = None            # sensor reading.
-        self.checkSumfh = None          # filehandler to record the checksum.
-        self.iterTime = -1              # Patt iteration time.
-        self.blockNum = 4               # memory block size.
-        self.stated = 'safe'          # Patt attestation result.
-        # Init TCP communication channel:
+        self.checkSumfh = None  # filehandler to record the checksum.
+        self.iterTime = 1       # Patt iteration time.
+        self.blockNum = 4       # memory block size.
+        self.stated = 'safe'    # Patt attestation result.
+        # Do one PATT check.
         self.getCheckSum(self.blockNum)
 
-        #-----------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------
     def getCheckSum(self, number_of_blocks):
         """ Get the local firmware checkSum and the sensor feed back checkSum."""
         # Get the random memory address.
@@ -53,7 +48,6 @@ class SensorPatt(object):
         sensor_checksum = self._calculate_sigma_star(address_list, gv.CLFM_FILE)
         print("telloSensor : sensor check sum %s" %
               str(verifier_checksum))
-
         #self.checkSumfh.write(str(verifier_checksum)+"\n")
         #self.checkSumfh.write(str(sensor_checksum) + "\n")
         if str(verifier_checksum) != str(sensor_checksum):
@@ -109,10 +103,10 @@ class SensorPatt(object):
         return beta_list
 
 
-
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 def main():
-    test = SensorPatt(None)
-
+    _ = camPATTChecker(None)
 
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
