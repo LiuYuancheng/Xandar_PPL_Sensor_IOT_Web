@@ -8,6 +8,7 @@
 # Copyright:   YC @ Singtel Cyber Security Research & Development Laboratory
 # License:     YC
 #-----------------------------------------------------------------------------
+
 # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates
 import io, sys
 import json
@@ -31,7 +32,8 @@ from testPGlobal import Config
 
 DE_COMM = 'COM3' if platform.system() == 'Windows' else '/dev/ttyUSB0'
 
-application = Flask(__name__)
+#application = Flask(__name__)
+application = Flask(__name__, static_url_path='/static')
 application.config.from_object(Config)
 
 #-----------------------------------------------------------------------------
@@ -73,7 +75,8 @@ def chart_data():
     def generate_random_data():
         while True:
             json_data = json.dumps(
-                {'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': gv.iCommReader.readComm() })
+                #{'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': gv.iCommReader.readComm() })
+                {'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': random.randint(2,5) })
             #print(f"data:{json_data}\n\n")
             yield "data:"+json_data+"\n\n"
             time.sleep(1)
@@ -162,7 +165,7 @@ class SensorCom(object):
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
-    gv.iCommReader = SensorCom(None)
+    #gv.iCommReader = SensorCom(None)
     print('Start the web server.')
     application.run(debug=False, threaded=True)
     # application.run(host= "0.0.0.0", debug=False, threaded=True) # use 0.0.0.0 if we want access the web from other computer.
