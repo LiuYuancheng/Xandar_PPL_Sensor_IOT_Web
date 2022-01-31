@@ -1,17 +1,42 @@
-# Flask_Sensor_Server
-#### Introduction
+Xandar_Sensor_Web
 
-This project will create a simple web server to provide the history chart to show the Xandar Kardian(
+**Program Design Purpose**: We want to create an web host to visualize Xandar Kardian people counting sensors detection result for a indoor area. 
 
-[XAKA]: http://xandar.com/people-counting/	"Xandar Kardian"
+[TOC]
 
-) People counting sensor data.  So when the engineer are installint the sensor with its IOT gateway. They don't need to use the computer to connect to the sensor directly to check the sensor state. They can login in the web sever running in the  IOT gateway to finish the job.
+### Introduction
 
-###### Web Main UI View: 
+This project will create a simple web server to provide the history chart to show the Xandar Kardian People counting sensor data.  So when the engineer are installing the sensor with its IOT gateway. They don't need to use the computer to connect to the sensor directly to check the sensor state. They can login in the web sever running in the  IOT gateway to finish the job.
 
-![](https://github.com/LiuYuancheng/Flask_Sensor_Server/blob/master/doc/2019-09-19_103505.png)
+Xandar Kardian people counting sensors introduction : http://xandar.com/people-counting/
+
+##### Web Main UI View 
+
+![](doc/img/xanda_sensor_web.gif)
+
+`version: v_2.1`
+
+
 
 ------
+
+### Program Design
+
+The web host program contents three main section
+
+##### Sensor data collection module 
+
+This module will normalized the reading data from the sensor and get the final people count. 
+
+##### Web host module 
+
+This module will provide a web host program to do the use authorization, result visualization.   
+
+
+
+------
+
+### Program Setup
 
 ###### Development env: Python 3.7
 
@@ -34,25 +59,59 @@ This project will create a simple web server to provide the history chart to sho
 2. Xandar Kardian People counting sensor.
 
    [Xandar Kardian]: http://xandar.com/people-counting/	"People counting sensor"
+   
+   ![](doc/img/sensor.png)
+
+###### Program Files List 
+
+| Program File            | Execution Env | Description                                                  |
+| ----------------------- | ------------- | ------------------------------------------------------------ |
+| src/ConfigLoader.py     | python 3      | Loader module to read the user name and password information. |
+| src/ConfigUser.txt      |               | Save user and password.                                      |
+| src/XAKAsensorComm.py   | python 3      | Sensor communication interface module.                       |
+| src/XAKAsensorGlobal.py | python 3      | Global parameters module.                                    |
+| src/XandaWebHost.py     | python 3      | Web host program.                                            |
+| src/templates/*.html    |               | All the html web pages.                                      |
+| src/static              |               | static files storage folder such as css, image file.         |
+|                         |               |                                                              |
 
 ------
 
-#### Program usage
+### Program Usage/Execution
 
 ###### Program execution cmd: 
 
 ```
-python testProute.py
+python XandaWebHost.py
 ```
 
 ###### Usage : 
 
-Type in the URL [IPaddr:5000] in your browser then the page will shown as below: 
+Type in the URL [IPaddr:5000] (http://127.0.0.1:5000/) in your browser then the page will shown as below: 
 
- ![](https://github.com/LiuYuancheng/Flask_Sensor_Server/blob/master/doc/2019-09-19_103258.png)
+ ![](doc/img/home.png)
 
-They click the Login link: 
+Then click the Login link and type in the username/password for authorization: 
 
-![](https://github.com/LiuYuancheng/Flask_Sensor_Server/blob/master/doc/2019-09-19_103328.png)
+![](doc/img/authorization.png)
 
 After type in the correct user name and password, the people counting sensor main page will show. 
+
+![](doc/img/2019-09-19_103505.png)
+
+
+
+### Problem and Solution
+
+N.A
+
+------
+
+### Reference
+
+Xandar Kardian people counting sensors : https://www.xkcorp.com/
+
+------
+
+> Last edit by LiuYuancheng(liu_yuan_cheng@hotmail.com) at 31/01/2022
+
