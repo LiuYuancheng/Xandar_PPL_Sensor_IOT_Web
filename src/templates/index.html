@@ -7,6 +7,8 @@
     <p><b> XAKA People Count Sensor Display Page.</b></p>
     <p><b> Plase click the "Login" page to check the sensor data.</b></p>
     <p><b> {{ post.author.username }} : {{ post.body }}</b></p>
+
+    <img src="{{url_for('static', filename='images/function.png')}}"/>
 </div>
 {% endfor %}
 {% endblock %}

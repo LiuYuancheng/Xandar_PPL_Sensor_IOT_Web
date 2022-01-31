@@ -1,7 +1,8 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" /> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     {% if title %}
     <title>{{ title }} - XAKA people count sensor</title>
     {% else %}
@@ -10,8 +11,9 @@
 
 </head>
 
-<body bgcolor="#2A292A">
-    <div> <b>XAKA people count sensor:</b>
+<body bgcolor="#C8C8C8">
+    <div>
+        <b>XAKA people count sensor:</b>
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('login') }}">Login</a>
     </div>

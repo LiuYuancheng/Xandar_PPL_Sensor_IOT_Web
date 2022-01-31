@@ -22,13 +22,13 @@ from datetime import datetime
 from functools import partial
 # import flask module to create the server.
 from flask import Flask, render_template, flash, redirect, Response
-from testPGlobal import Config
+from XandaGlobal import Config
 from flask_wtf import FlaskForm # pip install flask-wtf
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
-import testPGlobal as gv
-from testPGlobal import Config
+import XandaGlobal as gv
+from XandaGlobal import Config
 
 DE_COMM = 'COM3' if platform.system() == 'Windows' else '/dev/ttyUSB0'
 
@@ -40,7 +40,7 @@ application.config.from_object(Config)
 @application.route('/')
 @application.route('/index')
 def index():
-    user = {'username' : 'Welcome to access the XAKA people counting sensor.'}
+    user = {'username' : 'Welcome to access the XAKA people counting sensor'}
     posts = [
         {
             'author': {'username': 'new user'},
