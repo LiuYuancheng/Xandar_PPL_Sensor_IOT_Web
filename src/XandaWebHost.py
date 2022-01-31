@@ -22,7 +22,6 @@ from datetime import datetime
 from functools import partial
 # import flask module to create the server.
 from flask import Flask, render_template, flash, redirect, Response
-from XandaGlobal import Config
 from flask_wtf import FlaskForm # pip install flask-wtf
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
