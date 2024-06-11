@@ -32,6 +32,7 @@ import XAKAsensorComm as xcomm
 from XandaGlobal import Config
 
 
+
 application = Flask(__name__, static_url_path='/static')
 application.config.from_object(Config)
 
@@ -97,9 +98,18 @@ class LoginForm(FlaskForm):
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
     gv.iUserMgr = loader.ConfigLoader(gv.USER_PWD, mode='r', filterChars=('#', '', '\n'))
-    gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, simuMd=gv.gSimulationMode)
+    gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, simuMd=gv.gTestMd)
     gv.iCommReader.setSerialComm(searchFlag=True)
     print('Start the web server.')
     application.run(debug=False, threaded=True)
-    # application.run(host= "0.0.0.0", debug=False, threaded=True) # use 0.0.0.0 if we want access the web from other computer.
+    
     print('Finished')
+
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
+if __name__ == '__main__':
+    # application.run(host= "0.0.0.0", debug=False, threaded=True) # use 0.0.0.0 if we want access the web from other computer.
+    application.run(host=gv.gflaskHost,
+                port=gv.gflaskPort,
+                debug=gv.gflaskDebug,
+                threaded=gv.gflaskMultiTH)
