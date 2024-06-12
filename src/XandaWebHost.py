@@ -68,12 +68,13 @@ def index():
     return render_template('index.html')
 
 @application.route('/chart')
+@login_required
 def chart():
     posts = {'page': 1}
     return render_template('chart.html', posts=posts)
 
-
 @application.route('/chart-data') # the route component must match the related <dev> in the html file.
+@login_required
 def chart_data():
     def generate_sensor_data():
         while True:

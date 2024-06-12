@@ -48,7 +48,7 @@
                     <button class="btn btn-primary" type="button" onclick="location.href='{{ url_for('auth.login') }}'">login</button>
                 {% else %}
                     <input class="form-control me-2" type="text" value="login User: {{current_user.name}}" placeholder="Search">
-                    <a class="nav-link" href="{{ url_for('auth.logout') }}" >Logout </a>
+                    <button class="btn btn-warning" type="button" onclick="location.href='{{ url_for('auth.logout') }}'">Logout</button>
                 {% endif %}
 
             </form>

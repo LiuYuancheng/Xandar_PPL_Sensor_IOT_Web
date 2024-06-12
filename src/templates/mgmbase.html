@@ -21,19 +21,28 @@
                 <a href="{{ url_for('chart')}}" class="list-group-item list-group-item-action">Radar Data Chart</a>
                 {% endif %}
             </div>
-
+            {% if current_user.name == 'admin'%}
             <div class="list-group">
                 {% if posts['page'] == 2 %}
+                <a href="#" class="list-group-item list-group-item-action bg-secondary">User
+                    Configuration</a>
+                {% else %}
+                <a href="#" class="list-group-item list-group-item-action">User Configuration</a>
+                {% endif %}
+            </div>
+
+            <div class="list-group">
+                {% if posts['page'] == 3 %}
                 <a href="#" class="list-group-item list-group-item-action bg-secondary">IoT
                     Configuration</a>
                 {% else %}
                 <a href="#" class="list-group-item list-group-item-action">IoT Configuration</a>
                 {% endif %}
             </div>
-
+            {% endif %}
         {% endif %}
         <br>
-        <img src="{{url_for('static', filename='images/Logo.png')}}" class="class="rounded mx-auto d-block" alt="logo"> 
+        <img src="{{url_for('static', filename='images/Logo.png')}}" class="rounded mx-auto d-block" alt="logo"> 
 
     </div>
 
