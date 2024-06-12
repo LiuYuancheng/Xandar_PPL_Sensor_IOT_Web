@@ -48,7 +48,13 @@ if iConfigLoader is None:
     exit()
 CONFIG_DICT = iConfigLoader.getJson()
 
+
+APP_SEC_KEY = 'Temporary_secret_key' 
+COOKIE_TIME = 30
 ADMIN_USER = CONFIG_DICT['ADMIN_USER']
+
+gUser = 'admin'
+gPassword = 'admin'
 
 #-------<GLOBAL VARIABLES (start with "g")>-------------------------------------
 gTestMd = CONFIG_DICT['TEST_MD']
@@ -60,12 +66,6 @@ gflaskHost = 'localhost' if gTestMd else '0.0.0.0'
 gflaskPort = int(CONFIG_DICT['FLASK_SER_PORT']) if 'FLASK_SER_PORT' in CONFIG_DICT.keys() else 5000
 gflaskDebug = CONFIG_DICT['FLASK_DEBUG_MD']
 gflaskMultiTH =  CONFIG_DICT['FLASK_MULTI_TH']
-
-
-
-
-class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'Temporary_secret_key' 
 
 DE_COMM = 'COM3' if platform.system() == 'Windows' else '/dev/ttyUSB0'
 

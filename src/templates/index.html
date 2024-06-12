@@ -73,6 +73,9 @@
                 <br>
                 <br>
                 <br>
+                {% if current_user.is_authenticated %}
+                    <button class="btn btn-outline-success" type="button"  href="#">Link To IoT Data & Config</button>
+                {% endif %}
                 <button class="btn btn-outline-light" type="button"  href="https://github.com/LiuYuancheng/Xandar_PPL_Sensor_IOT_Web">Project Link</button>
                 <button class="btn btn-outline-info" type="button"  href="#">Xandar Kardian Link </button>
                 <button class="btn btn-outline-warning" type="button"  href="#">Raspberry PI Link </button>
@@ -80,12 +83,11 @@
         </div>
     </div>
 </div>
-
 <hr> 
-<h5> Steps to Config the IoT Device </h5>
 <div class="row">
     <div class="col-sm-3">
         <dl>
+            <h5> Steps to Config the IoT Device </h5>
             <dd> &#149; &nbsp Allocate the XAKA sensors to the monitor area position as shown on the right side
             </dd>
             <dd> &#149; &nbsp Connect the Raspberry PI to the network router by wire / wifi. </dd>

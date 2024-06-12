@@ -12,11 +12,15 @@
 # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-ii-templates
 import io, sys
 import json
-import random
+
+
+
 import time
-import serial
-import glob
-import platform
+from datetime import datetime, timedelta
+from threading import Thread
+
+
+
 from struct import unpack
 from datetime import datetime
 from functools import partial
@@ -25,14 +29,37 @@ from flask import Flask, render_template, flash, redirect, Response
 from flask_wtf import FlaskForm # pip install flask-wtf
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
+from flask_login import LoginManager, login_required
 
-import ConfigLoader as loader
 import XandaGlobal as gv
+import XandaWebAuth
 import XAKAsensorComm as xcomm
-from XandaGlobal import Config
 
-application = Flask(__name__)
-application.config.from_object(Config)
+
+#-----------------------------------------------------------------------------
+# Init the flask web app program.
+def createApp():
+    """ Create the flask App."""
+    # init the web host
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = gv.APP_SEC_KEY
+    app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=gv.COOKIE_TIME)
+    from XandaWebAuth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
+    
+    gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, simuMd=gv.gTestMd)
+    gv.iCommReader.setSerialComm(searchFlag=True)
+
+    # Create the user login manager
+    loginMgr = LoginManager()
+    loginMgr.loginview = 'auth.login'
+    loginMgr.init_app(app)
+    @loginMgr.user_loader
+    def loadUser(userID):
+        return XandaWebAuth.User(userID)
+    return app
+
+application = createApp()
 
 #-----------------------------------------------------------------------------
 @application.route('/')
@@ -41,21 +68,21 @@ def index():
     return render_template('index.html')
 
 #-----------------------------------------------------------------------------
-@application.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        userDict = gv.iUserMgr.getJson()
-        if str(form.username.data) in userDict.keys():
-            if str(userDict[form.username.data]) == str(form.password.data) :
-                flash('Login requested for user {}, remember_me={}'.format(
-                    form.username.data, form.remember_me.data))
-                return redirect('/chart')
-        else:
-            flash('User or password incorrect, please login again')
-            return redirect('/index')
+# @application.route('/login', methods=['GET', 'POST'])
+# def login():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         userDict = gv.iUserMgr.getJson()
+#         if str(form.username.data) in userDict.keys():
+#             if str(userDict[form.username.data]) == str(form.password.data) :
+#                 flash('Login requested for user {}, remember_me={}'.format(
+#                     form.username.data, form.remember_me.data))
+#                 return redirect('/chart')
+#         else:
+#             flash('User or password incorrect, please login again')
+#             return redirect('/index')
 
-    return render_template('login.html', title='Sign In', form=form)
+#     return render_template('login.html', title='Sign In', form=form)
 
 #-----------------------------------------------------------------------------
 @application.route('/chart')
@@ -83,17 +110,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
-
-#-----------------------------------------------------------------------------
-#-----------------------------------------------------------------------------
-if __name__ == '__main__':
-    gv.iUserMgr = loader.ConfigLoader(gv.USER_PWD, mode='r', filterChars=('#', '', '\n'))
-    gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, simuMd=gv.gTestMd)
-    gv.iCommReader.setSerialComm(searchFlag=True)
-    print('Start the web server.')
-    application.run(debug=False, threaded=True)
-    
-    print('Finished')
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
