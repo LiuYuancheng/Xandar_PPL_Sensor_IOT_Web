@@ -19,10 +19,10 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="{{url_for('static', filename='img/logo_icon.png')}}" alt="Avatar Logo" style="width:40px;"
+                <img src="{{url_for('static', filename='images/logo_icon.png')}}" alt="Avatar Logo" style="width:40px;"
                     class="rounded-pill">
             </a>
-            <a class="navbar-brand" href="{{ url_for('index')}}"> Ninja RedTeam Command and Control (RTC2) Hub </a>
+            <a class="navbar-brand" href="{{ url_for('index')}}"> Raspberry PI Xandar Kardian IoT People Count Radar </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -32,24 +32,24 @@
                         <a class="nav-link" href="#"> </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> API </a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> Links </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Link</a></li>
-                            <li><a class="dropdown-item" href="#">Another link</a></li>
-                            <li><a class="dropdown-item" href="#">A third link</a></li>
+                            <li><a class="dropdown-item" href="http://xandar.com/people-counting/"> Xandar Kardian People Detection Radar </a></li>
+                            <li><a class="dropdown-item" href="https://www.raspberrypi.com/"> Raspberry PI offical Web </a></li>
+                            <li><a class="dropdown-item" href="https://github.com/LiuYuancheng/Xandar_PPL_Sensor_IOT_Web"> Project github repo </a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
             
             <form class="d-flex">
-                <input class="form-control me-2" type="text" value="Host: 127.0.0.1:5000" placeholder="Search">
-                <button class="btn btn-primary" type="button">Connect</button>
+                <input class="form-control me-2" type="text" value="Host&Port: 0.0.0.0:5000" placeholder="Search">
+                <button class="btn btn-primary" type="button">Login</button>
             </form>
         </div>
     </nav>
     
-    <div class="container-fluid " style="margin-top:100px; min-height: 800px;">        
+    <div class="container-fluid " style="margin-top:100px; min-height: 700px;">        
         {% block content %}
         {% endblock %}
     </div>

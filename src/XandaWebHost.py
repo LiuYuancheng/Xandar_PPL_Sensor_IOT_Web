@@ -31,24 +31,14 @@ import XandaGlobal as gv
 import XAKAsensorComm as xcomm
 from XandaGlobal import Config
 
-
-
-application = Flask(__name__, static_url_path='/static')
+application = Flask(__name__)
 application.config.from_object(Config)
 
 #-----------------------------------------------------------------------------
 @application.route('/')
 @application.route('/index')
 def index():
-    user = {
-        'username': ' Welcome to access the XAKA[Xandar Kardian] people counting sensor '}
-    posts = [
-        {
-            'author': {'username': 'New IOT user'},
-            'body': 'The user has not logged in yet.'
-        },
-    ]
-    return render_template('index.html', title='Sign in', user=user, posts=posts)
+    return render_template('index.html')
 
 #-----------------------------------------------------------------------------
 @application.route('/login', methods=['GET', 'POST'])

@@ -1,14 +1,101 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1>{{ user.username }}!</h1>
-{% for post in posts %}
-<div>
-    <p><b> XAKA People Count Sensor Display Page.</b></p>
-    <p><b> Plase click the "Login" page to check the sensor data.</b></p>
-    <p><b> {{ post.author.username }} : {{ post.body }}</b></p>
+{% block style %}
 
-    <img src="{{url_for('static', filename='images/function.png')}}"/>
+<style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      height: 3rem;
+      background-color: rgba(0, 0, 0, .1);
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12">
+    <div class="h-100 p-5 text-bg-dark rounded-3">
+        <h2> Welcome to Access the XAKA[Xandar Kardian] People Counting Radar IoT </h2>
+        <br>
+        <div class="row">
+            <div class="col-sm-2">
+                <img src="{{url_for('static', filename='images/Logo.png')}}" class="rounded" />
+            </div>
+            <div class="col-sm-8">
+                <p>This project will create a simple web server to provide the history chart to show the Xandar Kardian People counting sensor data.  So when the engineer are installing the sensor with its IOT gateway. They don't need to use the computer to connect to the sensor directly to check the sensor state. They can login in the web sever running in the  IOT gateway to finish the job.</p>
+                <br>
+                <br>
+                <br>
+                <button class="btn btn-outline-light" type="button"  href="https://github.com/LiuYuancheng/Xandar_PPL_Sensor_IOT_Web">Project Link</button>
+                <button class="btn btn-outline-info" type="button"  href="#">Xandar Kardian Link </button>
+                <button class="btn btn-outline-warning" type="button"  href="#">Raspberry PI Link </button>
+                </div>
+        </div>
+    </div>
 </div>
-{% endfor %}
+
+<hr> 
+<h5> Steps to Config the IoT Device </h5>
+<div class="row">
+    <div class="col-sm-3">
+        <dl>
+            <dd> &#149; &nbsp Allocate the XAKA sensors to the monitor area position as shown on the right side
+            </dd>
+            <dd> &#149; &nbsp Connect the Raspberry PI to the network router by wire / wifi. </dd>
+            <dd> &#149; &nbsp Find the Raspberry PI IP address and log in the IoT Page with <b style="font-family: monospace;"> http://<ip>:5000 </b> </dd>
+            <dd> &#149; &nbsp After login check the sensor info and change the config to link the IoT to your hub. </dd>
+        </dl>
+    </div>
+    <div class="col-sm-9">
+        <img src="{{url_for('static', filename='images/function.png')}}" class="rounded"/>
+    </div>
+</div>
+<hr> 
 {% endblock %}
