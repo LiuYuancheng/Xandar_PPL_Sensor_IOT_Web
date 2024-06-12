@@ -67,27 +67,11 @@ application = createApp()
 def index():
     return render_template('index.html')
 
-#-----------------------------------------------------------------------------
-# @application.route('/login', methods=['GET', 'POST'])
-# def login():
-#     form = LoginForm()
-#     if form.validate_on_submit():
-#         userDict = gv.iUserMgr.getJson()
-#         if str(form.username.data) in userDict.keys():
-#             if str(userDict[form.username.data]) == str(form.password.data) :
-#                 flash('Login requested for user {}, remember_me={}'.format(
-#                     form.username.data, form.remember_me.data))
-#                 return redirect('/chart')
-#         else:
-#             flash('User or password incorrect, please login again')
-#             return redirect('/index')
-
-#     return render_template('login.html', title='Sign In', form=form)
-
-#-----------------------------------------------------------------------------
 @application.route('/chart')
 def chart():
-    return render_template('chart.html')
+    posts = {'page': 1}
+    return render_template('chart.html', posts=posts)
+
 
 @application.route('/chart-data') # the route component must match the related <dev> in the html file.
 def chart_data():

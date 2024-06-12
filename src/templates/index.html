@@ -74,9 +74,9 @@
                 <br>
                 <br>
                 {% if current_user.is_authenticated %}
-                    <button class="btn btn-outline-success" type="button"  href="#">Link To IoT Data & Config</button>
+                    <button class="btn btn-outline-success" type="button"  onclick="location.href='{{ url_for('chart') }}'">Link To IoT Data & Config</button>
                 {% endif %}
-                <button class="btn btn-outline-light" type="button"  href="https://github.com/LiuYuancheng/Xandar_PPL_Sensor_IOT_Web">Project Link</button>
+                <button class="btn btn-outline-light" type="button" onclick="location.href='https://github.com/LiuYuancheng/Xandar_PPL_Sensor_IOT_Web'">Project Link</button>
                 <button class="btn btn-outline-info" type="button"  href="#">Xandar Kardian Link </button>
                 <button class="btn btn-outline-warning" type="button"  href="#">Raspberry PI Link </button>
                 </div>

@@ -1,20 +1,15 @@
-{% extends "base.html" %}
+{% extends 'mgmbase.html' %}
 
-{% block content %}
+{% block title %} Radar data chart{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" rel="stylesheet">
-</head>
-<hr>
+{% block style%} {% endblock %}
 
-<body bgcolor="#C8C8C8">
+{% block mgmContent %}
+
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card bg-light text-dark">
                     <div class="card-body">
                         <canvas id="canvas"></canvas>
                     </div>
@@ -24,9 +19,6 @@
     </div>
     <!--suppress JSUnresolvedLibraryURL -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <!--suppress JSUnresolvedLibraryURL -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <!--suppress JSUnresolvedLibraryURL -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -93,5 +85,5 @@
             }
         });
     </script>
-</body>
+
 {% endblock %}

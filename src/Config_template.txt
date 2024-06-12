@@ -1,0 +1,25 @@
+# This is the config file template for the module <c2App.py>
+# Setup the paramter with below format (every line follows <key>:<val> format, the
+# key can not be changed):
+
+#-----------------------------------------------------------------------------
+# Test mode flag, 
+# - True: the program will simulate connected to a Xanda radar sensor via COM port
+# - False: the program will connect to a Xanda radar sensor via COM port. 
+TEST_MD:True
+
+#-----------------------------------------------------------------------------
+ADMIN_USER:admin
+ADMIN_PASSWD:admin
+
+#-----------------------------------------------------------------------------
+RPT_MD:False
+RPT_INT:5
+RPT_SER_IP:127.0.0.1
+RPT_SER_PORT:5001
+
+#-----------------------------------------------------------------------------
+# Init the Flask app parameters
+FLASK_SER_PORT:5000
+FLASK_DEBUG_MD:False
+FLASK_MULTI_TH:True
