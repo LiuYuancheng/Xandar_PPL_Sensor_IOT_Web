@@ -54,6 +54,7 @@ ADMIN_USER = CONFIG_DICT['ADMIN_USER']
 
 gUser = 'admin'
 gPassword = 'admin'
+gUsersRcd = os.path.join(dirpath, CONFIG_DICT['USERS_RCD'])
 
 #-------<GLOBAL VARIABLES (start with "g")>-------------------------------------
 gTestMd = CONFIG_DICT['TEST_MD']
@@ -70,11 +71,6 @@ gflaskHost = 'localhost' if gTestMd else '0.0.0.0'
 gflaskPort = int(CONFIG_DICT['FLASK_SER_PORT']) if 'FLASK_SER_PORT' in CONFIG_DICT.keys() else 5000
 gflaskDebug = CONFIG_DICT['FLASK_DEBUG_MD']
 gflaskMultiTH =  CONFIG_DICT['FLASK_MULTI_TH']
-
-
-
-
-USER_PWD = os.path.join(dirpath, 'ConfigUser.txt')
 
 #-------<GLOBAL PARAMTERS>-----------------------------------------------------
 iUserMgr = None

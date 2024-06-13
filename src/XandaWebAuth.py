@@ -14,6 +14,7 @@
 
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, login_required, logout_user, UserMixin
+
 import XandaGlobal as gv
 
 auth = Blueprint('auth', __name__)
@@ -43,12 +44,12 @@ def login_post():
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
     print((account, password))
-    if str(account)==gv.gUser:
-        if str(password) == gv.gPassword:
+    if gv.iUserMgr.userExist(account):
+        if gv.iUserMgr.verifyUser(str(account), str(password)):
             login_user(User(account), remember=remember)
             return redirect(url_for('index'))
         else:
-            flash('User password incorrect!')  
+            flash('User password incorrect!')
     else:
         flash('Login email address does not exit')
     return redirect(url_for('auth.login'))

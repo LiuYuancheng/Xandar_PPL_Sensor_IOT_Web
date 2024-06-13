@@ -34,6 +34,7 @@ from flask_login import LoginManager, login_required
 import XandaGlobal as gv
 import XandaWebAuth
 import XAKAsensorComm as xcomm
+import dataManager as dm
 
 
 #-----------------------------------------------------------------------------
@@ -47,6 +48,9 @@ def createApp():
     from XandaWebAuth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
     
+    # Init the user manager
+    gv.iUserMgr = dm.userMgr(gv.gUsersRcd)
+
     gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, simuMd=gv.gTestMd)
     gv.iCommReader.setSerialComm(searchFlag=True)
 
@@ -97,10 +101,8 @@ def chart_data():
 @application.route('/accmgmt')
 @login_required
 def accmgmt():
-    users = [
-        {'id': 'admin', 'type': 'admin', 'password':'admin'}
-    ]
-    return render_template('accmgmt.html', posts=users, newpwd='')
+    users = gv.iUserMgr.getUserInfo()
+    return render_template('accmgmt.html', posts=users)
 
 #-----------------------------------------------------------------------------
 class LoginForm(FlaskForm):

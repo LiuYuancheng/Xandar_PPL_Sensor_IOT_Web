@@ -11,11 +11,11 @@
         <h3 class="title"> IoT People Count Radar Web Protal Login </h3>
         <div class="box">
             {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="notification is-danger">
-                {{ messages[0] }}
-            </div>
-            {% endif %}
+                {% if messages %}
+                    <div class="alert alert-danger">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
             {% endwith %}
             <p></p>
             <form method="POST" action="/login">

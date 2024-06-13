@@ -10,8 +10,8 @@
             <table class="table table-dark">
                 <thead>
                     <tr class="table table-info">
-                        <!-- <th>Index</th> -->
-                        <th>User ID </th>
+                        <th>Index</th>
+                        <th>User Name</th>
                         <th>User Type</th>
                         <th>User Password </th>
                         <th>Password reset</th>
@@ -21,7 +21,8 @@
                 <tbody>
                     {% for post in posts %}
                     <tr>
-                        <td> {{ post['id'] }} </td>
+                        <td> {{ loop.index0 }} </td>
+                        <td> {{ post['username'] }} </td>
                         <td> {{ post['type'] }} </td>
                         <td> {{ post['password'] }} </td>
                         <td>
@@ -31,8 +32,8 @@
                             </form>
                         </td>
                         <td>
-                            {% if post['id'] == 'admin' %}
-                                - 
+                            {% if post['username'] == 'admin' %}
+                                -- 
                             {% else %}
                                 <form action="#" method="POST">
                                     <input type="submit" value="Enable" class="btn btn-success btn-sm"
