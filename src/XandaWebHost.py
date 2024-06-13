@@ -25,7 +25,7 @@ from struct import unpack
 from datetime import datetime
 from functools import partial
 # import flask module to create the server.
-from flask import Flask, render_template, flash, redirect, Response
+from flask import Flask, render_template, flash, url_for, redirect, request, Response
 from flask_wtf import FlaskForm # pip install flask-wtf
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
@@ -71,6 +71,46 @@ application = createApp()
 def index():
     return render_template('index.html')
 
+
+#-----------------------------------------------------------------------------
+# admin user account's request handling function.
+@application.route('/accmgmt')
+@login_required
+def accmgmt():
+    users = gv.iUserMgr.getUserInfo()
+    return render_template('accmgmt.html', posts=users)
+
+@application.route('/accmgmt/<string:username>/<string:action>', methods=('POST',))
+@login_required
+def changeAcc(username, action):
+    if action == 'delete':
+        if gv.iUserMgr.removeUser(str(username)):
+            flash('User deleted.')
+        else:
+            flash('User not found.')
+    return redirect(url_for('accmgmt'))
+
+
+@application.route('/addnewuser', methods=['POST', ])
+@login_required
+def addnewuser():
+    if request.method == 'POST':
+        tgttype = request.form.getlist('optradio')
+        tgtUser = request.form.get("username")
+        tgtPwd = request.form.get("password")
+
+        print((tgttype, tgtUser, tgtPwd))
+        
+        if not gv.iUserMgr.userExist(tgtUser):
+            userType = 'admin' if 'option1' in tgttype else 'user'
+            if gv.iUserMgr.addUser(tgtUser, tgtPwd, userType):
+                flash('User %s has been added.' %str(tgtUser))
+            else:
+                flash('User %s can not be added.' %str(tgtUser))
+        else:
+            flash('User %s has been exist.' %str(tgtUser))
+    return redirect(url_for('accmgmt'))
+
 #-----------------------------------------------------------------------------
 @application.route('/chart')
 @login_required
@@ -96,21 +136,15 @@ def chart_data():
             time.sleep(gv.gRadarUpdateInterval)
     return Response(generateSensorData(), mimetype='text/event-stream')
 
-#-----------------------------------------------------------------------------
-# admin user account's request handling function.
-@application.route('/accmgmt')
-@login_required
-def accmgmt():
-    users = gv.iUserMgr.getUserInfo()
-    return render_template('accmgmt.html', posts=users)
 
-#-----------------------------------------------------------------------------
-class LoginForm(FlaskForm):
-    """ Form to handle the user login."""
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+
+
+
+
+
+
+
+
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------

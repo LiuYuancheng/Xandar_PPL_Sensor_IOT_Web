@@ -52,7 +52,7 @@ class userMgr(object):
         with open(self.rcdJsonFile, 'w') as fh:
             fh.write(json.dumps(self.userInfo))
 
-    def addUser(self, userName, userPwd, userType, updateRcd=False):
+    def addUser(self, userName, userPwd, userType, updateRcd=True):
         if self.userExist(userName): return False
         if self.userInfo:
             data = {
@@ -65,7 +65,7 @@ class userMgr(object):
             return True
         return False
     
-    def updatePwd(self, userName, newPwd, updateRcd=False) :
+    def updatePwd(self, userName, newPwd, updateRcd=True) :
         if self.userInfo:
             for idx, item in enumerate(self.userInfo):
                 if item['username'] == userName:
@@ -75,12 +75,13 @@ class userMgr(object):
             return True
         return False
 
-    def removeUser(self, userName, updateRcd=False):
+    def removeUser(self, userName, updateRcd=True):
+        print(userName)
         if self.userInfo:
             for idx, item in enumerate(self.userInfo):
                 if item['username'] == userName:
                     self.userInfo.pop(idx)
-                break
-            if updateRcd: self.updateRcdFile()
-            return True
+                    print("User %s removed" %str(userName))
+                    if updateRcd: self.updateRcdFile()
+                    return True            
         return False
