@@ -11,10 +11,20 @@
             <li class="list-group-item">
                 <h4> XANDAR KARDIAN Radar People Counnt Data Chart </h4>
                 <hr>
-                <span class="badge bg-secondary">Radar Type:</span>
-                <span class="badge bg-secondary">Connected Port:</span>
-                <span class="badge bg-secondary">Connected State:</span>
-
+                <b> Radar Information : </b>
+                <span class="badge bg-secondary">Radar Type:</span> &nbsp
+                <span class="badge bg-bg-dark"> {{ posts['radarType'] }} </span>
+                <span class="badge bg-secondary">Connected Port:</span> &nbsp
+                <span class="badge bg-bg-dark"> {{ posts['radarPort'] }} </span>
+                <span class="badge bg-secondary">Connected State:</span> &nbsp
+                {% if posts['radarConn'] %}
+                    <span class="badge bg-warning"> Simulation Mode </span>
+                {% else %}
+                    <span class="badge bg-success"> Connected </span>
+                {% endif %}
+                <span class="badge bg-secondary"> Radar Update Interval:</span> &nbsp
+                <span class="badge bg-bg-dark"> {{ posts['radarInt'] }} sec </span>
+                <p> </p>
                 <div class="row">
                     <div class="col-12">
                         <div class="card bg-light text-dark">
@@ -24,8 +34,8 @@
                         </div>
                     </div>
                 </div>
+                <p> - </p>
             </li>
-            <br>
         </ul>
     </div>
 

@@ -24,10 +24,10 @@
             {% if current_user.name == 'admin'%}
             <div class="list-group">
                 {% if posts['page'] == 2 %}
-                <a href="#" class="list-group-item list-group-item-action bg-secondary">User
+                <a href="{{ url_for('accmgmt')}}" class="list-group-item list-group-item-action bg-secondary">User
                     Configuration</a>
                 {% else %}
-                <a href="#" class="list-group-item list-group-item-action">User Configuration</a>
+                <a href="{{ url_for('accmgmt')}}" class="list-group-item list-group-item-action">User Configuration</a>
                 {% endif %}
             </div>
 

@@ -67,26 +67,40 @@ application = createApp()
 def index():
     return render_template('index.html')
 
+#-----------------------------------------------------------------------------
 @application.route('/chart')
 @login_required
 def chart():
-    posts = {'page': 1}
+    posts = {'page': 1, 
+             'radarType': gv.gRadarType,
+             'radarPort': gv.gRadarPort,
+             'radarConn': gv.gTestMd,
+             'radarInt': str(gv.gRadarUpdateInterval) 
+             }
     return render_template('chart.html', posts=posts)
 
 @application.route('/chart-data') # the route component must match the related <dev> in the html file.
 @login_required
 def chart_data():
-    def generate_sensor_data():
+    def generateSensorData():
         while True:
             dataList = gv.iCommReader.fetchSensorData()
             peopleNum = int(dataList[27])
-            json_data = json.dumps(
-                #{'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': gv.iCommReader.readComm() })
-                {'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': peopleNum })
+            json_data = json.dumps({'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'value': peopleNum })
             #print(f"data:{json_data}\n\n")
-            yield "data:"+json_data+"\n\n"
-            time.sleep(1)
-    return Response(generate_sensor_data(), mimetype='text/event-stream')
+            yield "data:%s\n\n" %str(json_data)
+            time.sleep(gv.gRadarUpdateInterval)
+    return Response(generateSensorData(), mimetype='text/event-stream')
+
+#-----------------------------------------------------------------------------
+# admin user account's request handling function.
+@application.route('/accmgmt')
+@login_required
+def accmgmt():
+    users = [
+        {'id': 'admin', 'type': 'admin', 'password':'admin'}
+    ]
+    return render_template('accmgmt.html', posts=users, newpwd='')
 
 #-----------------------------------------------------------------------------
 class LoginForm(FlaskForm):
