@@ -51,12 +51,12 @@
                         <th>User Name</th>
                         <th>User Type</th>
                         <th>User Password </th>
-                        <th>Change User Config</th>
+                        <th>Change User Password</th>
                         <th>Delete User </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for post in posts %}
+                    {% for post in posts['users'] %}
                     <tr>
                         <td> {{ loop.index0 }} </td>
                         <td> {{ post['username'] }} </td>
@@ -66,9 +66,9 @@
                             <button type="button" class="btn btn-primary btn-sm" onclick="clip_div('{{ post['password'] }}')">copy to clipboard</button>
                         </td>
                         <td>
-                            <form method="POST" action="/addnewuser">
+                            <form method="POST" action="{{ url_for('setpassword', username=post['username'])}}">
                                 <div class="input-group mb-3 input-group-sm">
-                                <input type="text" class="form-control" placeholder="Input new password" style="width: 4%;">
+                                <input name="newpassword" type="password" class="form-control" placeholder="Input new password and press the reset button" style="width: 4%;">
                                 <button class="btn btn-warning btn-sm" type="submit" onclick=" return confirm('Confirm reset password of the user: {{ post['username'] }}?')">Reset Password</button>
                                 </div>
                             </form>
