@@ -1,6 +1,23 @@
-# Xandar_Sensor_Webd
+# People Detection IoT Radar
 
-**Program Design Purpose**: We want to create an web host to visualize Xandar Kardian people counting sensors detection result for a indoor area. 
+### Raspberry PI Xandar Kardian IoT People Count Radar
+
+![](doc/img/Logo.png)
+
+**Program Design Purpose**: 
+
+People detection sensors/radars are employed in various applications across different fields such as  security and surveillance, healthcare, building automation and smart cities, transportation and auto-pilot. This project is aim to create a general  indoor area. people counting IoT device with the Xandar Kardian People detection radar and Raspberry PI which can easily plug in the network and integrate other system.  The python IoT firmware will run on Raspberry PI and provide below function
+
+1. Read the raw data from the people detection radar and get the area people count. 
+2. Provide a web interface for user to view the data and adjust the radar parameters.
+3. Provide the IoT data access authorization and interface to integrated in to other system. 
+
+```
+# Created:     2019/09/11 
+# version:     v2.3 [rebuilt from v1.5 on 15/06/2024 ]
+# Copyright:   Copyright (c) 2024 LiuYuancheng
+# License:     MIT License
+```
 
 [TOC]
 

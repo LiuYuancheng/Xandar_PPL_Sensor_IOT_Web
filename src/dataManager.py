@@ -1,10 +1,10 @@
 #!/usr/bin/python
 #-----------------------------------------------------------------------------
-# Name:        threats2MitreApp.py [python3]
+# Name:        dataManager.py [python3]
 #
-# Purpose:     This module is the main web interface to call the AI-llm MITRE 
-#              ATT&CK-Mapper/ CWE-Matcher module to generate the related report.
-#  
+# Purpose:     This module is the data managment module used to link to the DB
+#              record file and provide the data to the other modules. 
+#
 # Author:      Yuancheng Liu
 #
 # Created:     2024/05/02
@@ -16,9 +16,15 @@
 import os
 import json
 
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 class userMgr(object):
-
+    """ User Manager class: This class is used to manage the user information."""
     def __init__(self, rcdJsonFilePath):
+        """ Load the user record and init the user manager.
+            Args:
+                rcdJsonFilePath (_type_): _description_
+        """
         self.rcdJsonFile = rcdJsonFilePath
         self.userInfo = None
         if os.path.exists(self.rcdJsonFile):
@@ -26,12 +32,13 @@ class userMgr(object):
                 with open(self.rcdJsonFile, 'r') as fh:
                     self.userInfo= json.loads(fh.read())
             except Exception as err:
-                print("Error to load the user file")
+                print("Error to load the user file.")
                 return None
         else:
             print("Error: the user file does not exist")
             return None
     
+    #-----------------------------------------------------------------------------
     def getUserInfo(self):
         return self.userInfo
     
