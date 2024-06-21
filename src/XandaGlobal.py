@@ -52,8 +52,6 @@ APP_SEC_KEY = 'Temporary_secret_key'
 COOKIE_TIME = 30
 ADMIN_USER = CONFIG_DICT['ADMIN_USER']
 
-gUser = 'admin'
-gPassword = 'admin'
 gUsersRcd = os.path.join(dirpath, CONFIG_DICT['USERS_RCD'])
 
 #-------<GLOBAL VARIABLES (start with "g")>-------------------------------------

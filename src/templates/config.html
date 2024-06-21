@@ -1,0 +1,251 @@
+{% extends 'mgmbase.html' %}
+
+{% block title %} Radar data chart{% endblock %}
+
+{% block style%} {% endblock %}
+
+{% block mgmContent %}
+<ul class="list-group">
+    <li class="list-group-item">
+        <h4> IoT Configuration </h4>
+        <p> </p>
+    </li>
+
+    <li class="list-group-item">
+
+        <h5> Radar Configuration </h5>
+        <p> </p>
+
+        <form method="POST" action="/changeUpdateIntv">
+            <div class="input-group mb-3" style="width: 40%;">
+                <span class="input-group-text"> Input radar data update interval (sec) :</span>
+                <input type="number" class="form-control" placeholder="5" name="updateintv" >
+                <button class="btn btn-success" type="submit"> Set </button>
+            </div>
+        </form>
+
+        <p> Radar paramter read</p>
+        <table class="table table-dark table-bordered">
+            <tbody>
+                <tr>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Sequence</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">People count</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Human Presence</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Program Version</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">ShortTerm avg</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">LongTerm avg</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">EnvMapping rm T</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Radar Map rm T</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Idx for radar mapping</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Num of ppl for radar map</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Device ID</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Start Rng</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">End Rng</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">LED on/off</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Trans period</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Calib factor</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Tiled Angle</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Radar Height</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Avg size</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Rresence on/off</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Final ppl num</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Radar MP val</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">Env MP val</label>
+                        </div>
+                    </td>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">serial num_1</label>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">serial num_2</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">serial dist1</label>
+                        </div>
+                    </td>
+
+                    <td> 
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                            <label class="form-check-label">serial dist2</label>
+                        </div>
+                    </td>
+                    <td> -- </td>
+                    <td> -- </td>
+                    <td> -- </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success btn-sm" type="submit"> Set </button>
+    </li>
+
+    <li class="list-group-item">
+        <h5> IoT Hub Configuration </h5>
+        <p> </p>
+
+        <form method="POST" action="/changeUpdateIntv">
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="reportmd" name="reportmd" value="yes">
+                <label class="form-check-label" for="reportmd">Enable report to hub </label>
+              </div>
+
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="xxx.xxx.xxx.xxx" name="newIp">
+                <button class="btn btn-success" type="submit"> Add </button>
+            </div>
+
+            <div class="input-group mb-3" style="width: 40%;">
+                <span class="input-group-text"> Input radar data update interval (sec) :</span>
+                <input type="number" class="form-control" placeholder="5" name="updateintv" >
+                <button class="btn btn-success" type="submit"> Set </button>
+            </div>
+        </form>
+
+    </li>
+</ul>
+{% endblock %}

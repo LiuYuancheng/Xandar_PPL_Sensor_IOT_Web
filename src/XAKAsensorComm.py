@@ -9,9 +9,9 @@
 # Author:      Yuancheng Liu
 #
 # Created:     29/01/2022
-# version:     v_2.1
-# Copyright:   YC has not added.
-# License:     YC has not added.
+# version:     v_2.3
+# Copyright:   Copyright (c) 2024 LiuYuancheng
+# License:     MIT License
 #-----------------------------------------------------------------------------
 
 import io
@@ -85,11 +85,13 @@ class XandarDataSimulator(object):
         self.savedData = preSavedData
 
     def read(self, byteNum):
-        """ return number of bytes simulate the serial read() function."""
+        """ return number of bytes simulate the serial read() function. return the servial
+            communicatin bytes data. 
+        """
         iterN = max(1, byteNum//self.chunkSize)
         dataByte = b''
         for _ in range(iterN):
-            data = self.dataHeader + pack('i', int(self.radarId)) + pack('i', random.randint(0, 15))
+            data = self.dataHeader + pack('i', int(self.radarId)) + pack('i', 34)
             for _ in range(35):
                 #data += pack('f', random.uniform(self.valRange[0], self.valRange[1]))
                 data += pack('f', round(random.uniform(self.valRange[0], self.valRange[1]), 2))
@@ -118,7 +120,7 @@ class XAKAsensorComm(threading.Thread):
         self.readIntv = readIntv    # radar data read interval in seconds.
         self.simuMd = simuMd        # simulation mode flag
         self.timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.dataList = []          # current data.
+        self.dataList = [0]*37          # current data.
         self.terminate = False
 
 #-----------------------------------------------------------------------------

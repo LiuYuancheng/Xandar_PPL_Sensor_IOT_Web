@@ -25,7 +25,7 @@
 
 import json
 import time
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 # import flask module to create the server.
 from flask import Flask, render_template, flash, url_for, redirect, request, Response
@@ -102,11 +102,29 @@ def chart_data():
     return Response(generateSensorData(), mimetype='text/event-stream')
 
 # -----------------------------------------------------------------------------
-# page 2 admin user account's request handling function.
+# page 2: all data paramters page
+@application.route('/data')
+@login_required
+def data():
+    timestamp = gv.iCommReader.getTimestamp()
+    dataList = gv.iCommReader.getData()
+    postdata = list(zip(xcomm.LABEL_LIST, dataList))
+    n = 3
+    postList = [postdata[i * n:(i + 1) * n] for i in range((len(postdata) + n - 1) // n )]  
+    posts = {'page': 2,
+             'radarID': dataList[0],
+             'time': timestamp, 
+             'data': postList
+             }
+    #print(posts)
+    return render_template('data.html', posts=posts)
+
+# -----------------------------------------------------------------------------
+# page 3 admin user account's request handling function.
 @application.route('/accmgmt')
 @login_required
 def accmgmt():
-    posts = {'page': 2,
+    posts = {'page': 3,
              'users': gv.iUserMgr.getUserInfo()
             }
     return render_template('accmgmt.html', posts=posts)
@@ -121,7 +139,7 @@ def changeAcc(username, action):
     """
     if action == 'delete':
         if gv.iUserMgr.removeUser(str(username).strip()):
-            flash('User %s deleted.' % str(username))
+            flash('User [ %s ] has been deleted.' % str(username))
         else:
             flash('User not found.')
     return redirect(url_for('accmgmt'))
@@ -138,11 +156,11 @@ def addnewuser():
         if not gv.iUserMgr.userExist(tgtUser):
             userType = 'admin' if 'option1' in tgttype else 'user'
             if gv.iUserMgr.addUser(tgtUser, tgtPwd, userType):
-                flash('User %s has been added.' % str(tgtUser))
+                flash('User [ %s ] has been added.' % str(tgtUser))
             else:
-                flash('User %s can not be added.' % str(tgtUser))
+                flash('User [ %s ] can not be added.' % str(tgtUser))
         else:
-            flash('User %s has been exist.' % str(tgtUser))
+            flash('User [ %s ] has been exist.' % str(tgtUser))
     return redirect(url_for('accmgmt'))
 
 @application.route('/setpassword/<string:username>', methods=['POST', ])
@@ -154,12 +172,34 @@ def setpassword(username):
         if newPassword:
             rst = gv.iUserMgr.updatePwd(username, newPassword)
             if rst:
-                flash('Password of user %s has been changed.' % str(username))
+                flash('Password of user [ %s ] has been changed.' % str(username))
             else:
-                flash('Password of user %s can not be changed.' % str(username))
+                flash('Password of user [ %s ] can not be changed.' % str(username))
         else:
             flash('Password can not be empty.')
     return redirect(url_for('accmgmt'))
+
+# -----------------------------------------------------------------------------
+# page 4 admin user account's request handling function.
+@application.route('/config')
+@login_required
+def config():
+    posts = {'page': 4,
+             'users': gv.iUserMgr.getUserInfo()
+            }
+    return render_template('config.html', posts=posts)
+
+@application.route('/changeUpdateIntv', methods=['POST', ])
+@login_required
+def changeUpdateIntv():
+    """ Change the update interval of the system."""
+    if request.method == 'POST':
+        try:
+            newIntv = int(request.form.get("updateintv"))
+            gv.gRadarUpdateInterval = max(1, newIntv)
+        except Exception as err:
+            flash('Password can not be empty.')
+    return redirect(url_for('config'))
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------

@@ -21,9 +21,18 @@
                 <a href="{{ url_for('chart')}}" class="list-group-item list-group-item-action">Radar Data Chart</a>
                 {% endif %}
             </div>
-            {% if current_user.name == 'admin'%}
+
             <div class="list-group">
                 {% if posts['page'] == 2 %}
+                    <a href="{{ url_for('data')}}" class="list-group-item list-group-item-action bg-secondary">All Radar Data</a>
+                {% else %}
+                <a href="{{ url_for('data')}}" class="list-group-item list-group-item-action">All Radar Data</a>
+                {% endif %}
+            </div>
+
+            {% if current_user.name == 'admin'%}
+            <div class="list-group">
+                {% if posts['page'] == 3 %}
                 <a href="{{ url_for('accmgmt')}}" class="list-group-item list-group-item-action bg-secondary">User
                     Configuration</a>
                 {% else %}
@@ -32,11 +41,11 @@
             </div>
 
             <div class="list-group">
-                {% if posts['page'] == 3 %}
-                <a href="#" class="list-group-item list-group-item-action bg-secondary">IoT
+                {% if posts['page'] == 4 %}
+                <a href="{{ url_for('config')}}" class="list-group-item list-group-item-action bg-secondary">IoT
                     Configuration</a>
                 {% else %}
-                <a href="#" class="list-group-item list-group-item-action">IoT Configuration</a>
+                <a href="{{ url_for('config')}}" class="list-group-item list-group-item-action">IoT Configuration</a>
                 {% endif %}
             </div>
             {% endif %}
