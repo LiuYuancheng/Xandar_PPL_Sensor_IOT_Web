@@ -1,4 +1,4 @@
-# People Detection IoT Radar
+# People Detection Radar [IoT]
 
 ### Raspberry PI Xandar Kardian IoT People Count Radar
 
@@ -6,7 +6,7 @@
 
 **Program Design Purpose**: 
 
-People detection sensors/radars are employed in various applications across different fields such as  security and surveillance, healthcare, building automation and smart cities, transportation and auto-pilot. This project is aim to create a general  indoor area. people counting IoT device with the Xandar Kardian People detection radar and Raspberry PI which can easily plug in the network and integrate other system.  The python IoT firmware will run on Raspberry PI and provide below function
+People detection sensors/radars are employed in various applications across different fields such as  security and surveillance, healthcare, building automation and smart cities, transportation and auto-pilot. This project is aim to create a prototype indoor area. people counting IoT device with the Xandar Kardian People detection radar and Raspberry PI which can easily plug in the network and integrate other system.  The python IoT firmware will run on Raspberry PI and provide below function
 
 1. Read the raw data from the people detection radar and get the area people count. 
 2. Provide a web interface for user to view the data and adjust the radar parameters.

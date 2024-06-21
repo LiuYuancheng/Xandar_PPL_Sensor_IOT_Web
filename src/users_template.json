@@ -1,13 +1,12 @@
-[
-    {
+{
+    "admin": {
         "username": "admin",
         "password": "admin",
         "usertype": "admin"
     }, 
-
-    {
+    "testuser": {
         "username": "testuser",
         "password": "testuser",
         "usertype": "user"
     }
-]
+}

@@ -3,7 +3,7 @@
 # Name:        XAKAsensorComm.py
 #
 # Purpose:     This module is sensor communication interface module to read the 
-#              data from the XAnKA people counting sensor. The user can also use
+#              data from the Xandar people counting sensor. The user can also use
 #              this module to generate the simulation data.
 #             
 # Author:      Yuancheng Liu
@@ -19,16 +19,68 @@ import sys
 import glob
 import serial
 import random
+import time
+import threading
+
+from datetime import datetime
 from struct import pack, unpack
 from functools import partial
 
-#-----------------------------------------------------------------------------
-#-----------------------------------------------------------------------------
-class XandarSimulator(object):
-    """ module used to simulate a Xandar COMM USB port interface."""
+LABEL_LIST = [
+    'Seonsor ID: ',
+    'Parameter Count:',
+    'Presence Info:',
+    '0: Sequence',
+    '1: Idx People count',
+    '2: Reserved',
+    '3: Reserved',
+    '4: Human Presence',
+    '5: Program Version',
+    '6: ShortTerm avg',
+    '7: LongTerm avg',
+    '8: EnvMapping rm T',
+    '9: Radar Map rm T',
+    '10: Idx for radar mapping',
+    '11: Num of ppl for radar map',
+    '12: Device ID',
+    '13: Start Rng',
+    '14: End Rng',
+    '15: Reserved',
+    '16: LED on/off',
+    '17: Trans period',
+    '18: Calib factor',
+    '19: Tiled Angle',
+    '20: Radar Height',
+    '21: Avg size',
+    '22: Presence on/off',
+    '23: Reserved',
+    '24: Final ppl num',
+    '25: Radar MP val',
+    '26: Env MP val',
+    '27: serial num_1',
+    '28: serial num_2',
+    '29: serial dist1',
+    '30: serial dist2',
+    '31: Reserved',
+    '32: Reserved',
+    '33: Reserved',
+]
 
-    def __init__(self, preSavedData=None) -> None:
+#-----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
+class XandarDataSimulator(object):
+    """ Module used to simulate a Xandar COMM USB port interface."""
+
+    def __init__(self, radarId=0, valRange=(1, 7.0), preSavedData=None) -> None:
+        """ Init the data simulator
+            Args:
+                radarId (int, optional): radar ID. Defaults to 0.
+                valRange (tuple, optional): random value range. Defaults to (1.5, 7.0).
+                preSavedData (_type_, optional): presaved simulation data. Defaults to None.
+        """
         self.dataHeader = b''
+        self.radarId = radarId
+        self.valRange = valRange
         self.chunkSize = 100
         self.savedData = preSavedData
 
@@ -37,10 +89,10 @@ class XandarSimulator(object):
         iterN = max(1, byteNum//self.chunkSize)
         dataByte = b''
         for _ in range(iterN):
-            data = self.dataHeader + pack('i', 0) + pack('i', random.randint(0, 15))
+            data = self.dataHeader + pack('i', int(self.radarId)) + pack('i', random.randint(0, 15))
             for _ in range(35):
-                data += pack('f', random.uniform(1.5, 7.0))
-                #data += pack('f', float("{:.2f}".format(random.randint(0, 15))))
+                #data += pack('f', random.uniform(self.valRange[0], self.valRange[1]))
+                data += pack('f', round(random.uniform(self.valRange[0], self.valRange[1]), 2))
             dataByte += data
         #print('read: %s' %str(dataByte))
         return dataByte
@@ -57,13 +109,17 @@ class XandarSimulator(object):
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
-class XAKAsensorComm(object):
+class XAKAsensorComm(threading.Thread):
 
-    def __init__(self, commPort, simuMd=False) -> None:
+    def __init__(self, commPort, readIntv=2, simuMd=False) -> None:
+        threading.Thread.__init__(self)
         self.serComm = None
         self.serialPort = commPort  # the serial port name we are going to read.
+        self.readIntv = readIntv    # radar data read interval in seconds.
         self.simuMd = simuMd        # simulation mode flag
+        self.timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.dataList = []          # current data.
+        self.terminate = False
 
 #-----------------------------------------------------------------------------
     def setSerialComm(self, searchFlag=False):
@@ -73,7 +129,7 @@ class XAKAsensorComm(object):
             self.serComm = None 
         if self.simuMd:
             print("Load the simulation Xandar sensor comm port.")
-            self.serComm = XandarSimulator()
+            self.serComm = XandarDataSimulator()
             self.serComm.setChunk(b'XAKA', 148)
             return True
         portList = []
@@ -125,6 +181,7 @@ class XAKAsensorComm(object):
                         val = unpack('i', data) if idx == 0 or idx == 1 else unpack('<f', data)  # get the ID and parameter number
                         self.dataList.append(val[0])
                     break # only process the data once.
+            self.timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             if len(self.dataList) == 0: 
                 print("Please check the sensor connection.")
                 return None
@@ -132,21 +189,54 @@ class XAKAsensorComm(object):
                 return self.getData()
 
 #-----------------------------------------------------------------------------
+    def run(self):
+        """ Run the sensor comm to fetch the data."""
+        print("Start the radar data fetching...")
+        while not self.terminate:
+            self.fetchSensorData()
+            time.sleep(self.readIntv)
+        print("Stop the radar data fetching")
+
+#-----------------------------------------------------------------------------
+    def getTimestamp(self):
+        return self.timestamp
+
+#-----------------------------------------------------------------------------
     def getData(self):
         return self.dataList
+
+    def updateFetchInterval(self, readIntv):
+        self.readIntv = max(1, readIntv)
+
+    def stop(self):
+        self.terminate = True
+        if self.serComm: self.serComm.close()
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 def testCase(mode=0):
     if mode == 0:
+        print("Test case 1: one time data fetch function.")
         serComm = XAKAsensorComm('COM0', simuMd=True)
         serComm.setSerialComm()
         print(serComm.fetchSensorData())
-        # print(serComm.getData())
+    elif mode == 1:
+        print("Test case 2: continuous data fetch function.")
+        serComm = XAKAsensorComm('COM0', simuMd=True)
+        serComm.setSerialComm()
+        serComm.start()
+        time.sleep(3)
+        for i in range (10):
+            print("- read time: %s" %str(serComm.getTimestamp()))
+            datalist = serComm.getData()
+            for i, val in enumerate(datalist):
+                print("%s : %s" %( LABEL_LIST[i],str(datalist[i])))
+            time.sleep(3)
+        serComm.stop()
     else:
         print("Put your test code here:")
         
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
     #testCase()
-    testCase(mode=0)
+    testCase(mode=1)

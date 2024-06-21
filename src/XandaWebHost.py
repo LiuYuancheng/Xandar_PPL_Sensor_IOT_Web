@@ -34,7 +34,6 @@ from flask_login import LoginManager, login_required
 import XandaGlobal as gv
 import XandaWebAuth
 import XAKAsensorComm as xcomm
-import dataManager as dm
 
 # -----------------------------------------------------------------------------
 # Init the flask web app program.
@@ -58,10 +57,13 @@ def createApp():
     return app
 
 # Init the user manager
-gv.iUserMgr = dm.userMgr(gv.gUsersRcd)
+gv.iUserMgr = XandaWebAuth.userMgr(gv.gUsersRcd)
 # Init the radar communication module
-gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, simuMd=gv.gTestMd)
-gv.iCommReader.setSerialComm(searchFlag=True)
+
+gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, readIntv=gv.gRadarUpdateInterval, simuMd=gv.gTestMd)
+searchRadar = not gv.gTestMd
+gv.iCommReader.setSerialComm(searchFlag=searchRadar)
+gv.iCommReader.start()
 application = createApp()
 
 # -----------------------------------------------------------------------------
@@ -90,23 +92,22 @@ def chart():
 def chart_data():
     def generateSensorData():
         while True:
-            dataList = gv.iCommReader.fetchSensorData()
+            timestamp = gv.iCommReader.getTimestamp()
+            dataList = gv.iCommReader.getData()
             peopleNum = int(dataList[27])
-            json_data = json.dumps({'time': datetime.now().strftime(
-                '%Y-%m-%d %H:%M:%S'), 'value': peopleNum})
+            json_data = json.dumps({'time': timestamp, 'value': peopleNum})
             # print(f"data:{json_data}\n\n")
             yield "data:%s\n\n" % str(json_data)
             time.sleep(gv.gRadarUpdateInterval)
     return Response(generateSensorData(), mimetype='text/event-stream')
-
 
 # -----------------------------------------------------------------------------
 # page 2 admin user account's request handling function.
 @application.route('/accmgmt')
 @login_required
 def accmgmt():
-    posts = {   'page': 2,
-                'users': gv.iUserMgr.getUserInfo()
+    posts = {'page': 2,
+             'users': gv.iUserMgr.getUserInfo()
             }
     return render_template('accmgmt.html', posts=posts)
 
