@@ -2,15 +2,15 @@
 # Name:        XandaWebHost.py
 #
 # Purpose:     Flask website host IoT frame work program running on the Raspberry-PI
-#              to read the Xanda people detection radar information, then display
+#              to read the CT100 Xanda people detection radar information, then display
 #              the information on web interface. It also provide the users managment
 #              feature, radar configuration adjustment and interface for other
-#              program to fetch the information from the IoT
+#              program to fetch the information from the IoT device.
 #
 # Author:      Yuancheng Liu
 #
 # Created:     2019/09/11 
-# version:     v2.3 [rebuilt from v1.5 on 15/06/2024 ]
+# version:     v2.3 [ rebuilt from v1.5 on 15/06/2024 ]
 # Copyright:   Copyright (c) 2024 LiuYuancheng
 # License:     MIT License
 #------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ import time
 from datetime import timedelta
 
 # import flask module to create the server.
-from flask import Flask, render_template, flash, url_for, redirect, request, Response
+from flask import Flask, render_template, flash, url_for, redirect, jsonify, abort, request, Response
 from flask_login import LoginManager, login_required
 
 import XandaGlobal as gv
@@ -45,12 +45,10 @@ def createApp():
     app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=gv.COOKIE_TIME)
     from XandaWebAuth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
-
     # Create the user login manager
     loginMgr = LoginManager()
     loginMgr.loginview = 'auth.login'
     loginMgr.init_app(app)
-
     @loginMgr.user_loader
     def loadUser(userID):
         return XandaWebAuth.User(userID)
@@ -60,7 +58,8 @@ def createApp():
 gv.iUserMgr = XandaWebAuth.userMgr(gv.gUsersRcd)
 # Init the radar communication module
 
-gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, readIntv=gv.gRadarUpdateInterval, simuMd=gv.gTestMd)
+gv.iCommReader = xcomm.XAKAsensorComm(gv.DE_COMM, 
+                                      readIntv=gv.gRadarUpdateInterval, simuMd=gv.gTestMd)
 searchRadar = not gv.gTestMd
 gv.iCommReader.setSerialComm(searchFlag=searchRadar)
 gv.iCommReader.start()
@@ -86,15 +85,17 @@ def chart():
              }
     return render_template('chart.html', posts=posts)
 
-# the route component must match the related <dev> in the html file.
 @application.route('/chart-data')
 @login_required
 def chart_data():
+    """ Send the data to the chart.html page's chart component. The route component 
+        must match the related <dev> in the html file.
+    """
     def generateSensorData():
         while True:
             timestamp = gv.iCommReader.getTimestamp()
             dataList = gv.iCommReader.getData()
-            peopleNum = int(dataList[27])
+            peopleNum = int(dataList[27]) # select normalized people number value.
             json_data = json.dumps({'time': timestamp, 'value': peopleNum})
             # print(f"data:{json_data}\n\n")
             yield "data:%s\n\n" % str(json_data)
@@ -109,7 +110,7 @@ def data():
     timestamp = gv.iCommReader.getTimestamp()
     dataList = gv.iCommReader.getData()
     postdata = list(zip(xcomm.LABEL_LIST, dataList))
-    n = 3
+    n = 3 # show 3 paramter in one table row
     postList = [postdata[i * n:(i + 1) * n] for i in range((len(postdata) + n - 1) // n )]  
     posts = {'page': 2,
              'radarID': dataList[0],
@@ -204,7 +205,6 @@ def changeUpdateIntv():
             flash('Password can not be empty.')
     return redirect(url_for('config'))
 
-
 @application.route('/changerptset', methods=['POST', ])
 @login_required
 def changerptset():
@@ -217,8 +217,27 @@ def changerptset():
         if rptIP: gv.gRptHubIP = str(rptIP)
         if rptPort: gv.gRptHubPort = int(rptPort)
         if rptIntv: gv.gRptIntv = int(rptIntv)
-
     return redirect(url_for('config'))
+
+# -----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
+@application.route('/getLastData', methods=['GET', ])
+def getLastRst():
+    """ Handle the data get request
+        requests.get(http://%s:%s/getLastData, json={'user':<>, 'password':<>})
+    """
+    try:
+        content = request.json
+        if content:
+            content = dict(content)
+            user, pwd = str(content['user']), str(content['password'])
+            if gv.iUserMgr.verifyUser(user, pwd):
+                timestamp = gv.iCommReader.getTimestamp()
+                dataList = gv.iCommReader.getData()
+                return jsonify({"time": timestamp, "data": dataList})
+    except Exception as err:
+        abort(404)
+    abort("Get data failed!")
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------

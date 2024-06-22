@@ -3,8 +3,8 @@
 # Name:        XAKAsensorComm.py
 #
 # Purpose:     This module is sensor communication interface module to read the 
-#              data from the Xandar people counting sensor. The user can also use
-#              this module to generate the simulation data.
+#              data from the Xandar people counting sensor via COM port or GPIO. 
+#              The user can also use this module to generate the simulation data.
 #             
 # Author:      Yuancheng Liu
 #
@@ -25,7 +25,7 @@ import threading
 from datetime import datetime
 from struct import pack, unpack
 from functools import partial
-
+# Current radar data list.
 LABEL_LIST = [
     'Seonsor ID: ',
     'Parameter Count:',
@@ -71,7 +71,7 @@ LABEL_LIST = [
 class XandarDataSimulator(object):
     """ Module used to simulate a Xandar COMM USB port interface."""
 
-    def __init__(self, radarId=0, valRange=(1, 7.0), preSavedData=None) -> None:
+    def __init__(self, radarId=0, valRange=(1, 7), preSavedData=None) -> None:
         """ Init the data simulator
             Args:
                 radarId (int, optional): radar ID. Defaults to 0.
@@ -84,8 +84,9 @@ class XandarDataSimulator(object):
         self.chunkSize = 100
         self.savedData = preSavedData
 
+    #-----------------------------------------------------------------------------
     def read(self, byteNum):
-        """ return number of bytes simulate the serial read() function. return the servial
+        """ Return number of bytes simulate the serial read() function. return the servial
             communicatin bytes data. 
         """
         iterN = max(1, byteNum//self.chunkSize)
@@ -99,6 +100,7 @@ class XandarDataSimulator(object):
         #print('read: %s' %str(dataByte))
         return dataByte
 
+    #-----------------------------------------------------------------------------
     def setChunk(self, header, chunkSize):
         self.dataHeader = header
         self.chunkSize = chunkSize
@@ -112,8 +114,20 @@ class XandarDataSimulator(object):
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 class XAKAsensorComm(threading.Thread):
+    """ Communication module used to search the radar sensor from serial(COM) port 
+        or GPIO then fetch data from the radar. It will running parallel with the 
+        main program thread to fetch the data regularly based on user's time interval 
+        config setting.
+    """
 
     def __init__(self, commPort, readIntv=2, simuMd=False) -> None:
+        """ Constructor.
+            Args:
+                commPort (str): Serial Port number if not set the module will scan all possible 
+                    COM ports to find the connectable one. 
+                readIntv (int, optional): data fetch interval in sec. Defaults to 2.
+                simuMd (bool, optional): simulation mode. Defaults to False.
+        """
         threading.Thread.__init__(self)
         self.serComm = None
         self.serialPort = commPort  # the serial port name we are going to read.

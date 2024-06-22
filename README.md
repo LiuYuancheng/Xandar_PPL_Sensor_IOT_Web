@@ -14,16 +14,22 @@ People detection sensors and radars are utilized in various applications across 
 
 3. Provide IoT data access authorization and interfaces for integration with other systems.
 
-The projected Python IoT firmware code is modularized and flexible for user to plug their own sensors on Raspberry PI to build different kinds of IoT device.
+The projected Python IoT firmware code is modularized and flexible for user to plug their own sensors on Raspberry PI to build different kinds of IoT device. The system workflow is shown below: 
+
+![](doc/img/sysworkflow.png)
 
 ```
-# Created:     2019/09/11 
-# version:     v2.3 [rebuilt from v1.5 on 15/06/2024 ]
+# Created:     2019/09/11 [ rebuilt from v1.5 on 22/06/2024 ]
+# version:     v2.3 
 # Copyright:   Copyright (c) 2024 LiuYuancheng
 # License:     MIT License
 ```
 
+**Table of Contents**
+
 [TOC]
+
+------
 
 ### Introduction
 

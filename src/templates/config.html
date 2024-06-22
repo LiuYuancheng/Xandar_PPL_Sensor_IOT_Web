@@ -1,6 +1,6 @@
 {% extends 'mgmbase.html' %}
 
-{% block title %} Radar data chart{% endblock %}
+{% block title %} Radar IoT Configuration {% endblock %}
 
 {% block style%} {% endblock %}
 
@@ -16,12 +16,12 @@
         <h5> Radar Configuration </h5>
         <p> </p>
         <button type="button" class="btn btn-primary">
-            Current radar data fetch interval :  <span class="badge bg-dark"> {{ posts['updateIntv']}} </span> sec
+            Current radar data fetching time interval :  <span class="badge bg-dark"> {{ posts['updateIntv']}} </span> sec
         </button>
         <p> </p>
         <form method="POST" action="/changeUpdateIntv">
             <div class="input-group mb-3" style="width: 40%;">
-                <span class="input-group-text"> Input radar data update interval (sec) :</span>
+                <span class="input-group-text"> Input radar data update interval (sec) : </span>
                 <input type="number" class="form-control" placeholder="5" name="updateintv" >
                 <button class="btn btn-success" type="submit"> Set </button>
             </div>

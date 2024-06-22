@@ -45,13 +45,13 @@
             <form class="d-flex">
                 {% if not current_user.is_authenticated %}
                     <input class="form-control me-2" type="text" value="Host&Port: 0.0.0.0:5000" placeholder="Search">
-                    <button class="btn btn-primary" type="button" onclick="location.href='{{ url_for('auth.login') }}'">login</button>
+                    <button class="btn btn-primary" type="button" onclick="location.href='{{ url_for('auth.login') }}'"> login </button>
                 {% else %}
                     <input class="form-control me-2" type="text" value="login User: {{current_user.name}}" placeholder="Search">
-                    <button class="btn btn-warning" type="button" onclick="location.href='{{ url_for('auth.logout') }}'">Logout</button>
+                    <button class="btn btn-warning" type="button" onclick="location.href='{{ url_for('auth.logout') }}'"> Logout </button>
                 {% endif %}
-
             </form>
+            
         </div>
     </nav>
     

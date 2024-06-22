@@ -1,8 +1,8 @@
 #-----------------------------------------------------------------------------
 # Name:        XandaWebAuth.py
 #
-# Purpose:     User autherization module used for handle the web site user login
-#              signup and logout.
+# Purpose:     User autherization and managment module used for handling the 
+#              website user create, update, login and logout request.
 #              
 # Author:      Yuancheng Liu
 #
@@ -24,26 +24,39 @@ auth = Blueprint('auth', __name__)
 # -----------------------------------------------------------------------------
 class userMgr(JsonLoader):
     """ User information manager module to handle add user, delete user, update 
-        user, query user information. Is is a child module of """
+        user, query user information. It is a child module inherted from  
+        ConfigLoader.JsonLoader
+    """
+    
     def __init__(self, userRcd):
+        """ userMgr class constructor. Init example mgr = userMgr("user.json")
+            Args:
+                userRcd (str): user record json file path.
+        """
         super().__init__()
         self.loadFile(userRcd)
 
+    # -----------------------------------------------------------------------------
+    # user check function.
     def userExist(self, userID):
         if not self._haveData(): return False
         if userID in self.jsonData.keys(): return True
         return False
 
+    def verifyUser(self, userName, userPwd):
+        if self.userExist(userName):
+            return self.jsonData[str(userName)]['password'] == userPwd
+        return False
+    
+    # -----------------------------------------------------------------------------
+    # Get() function
     def getUserInfo(self):
         if self._haveData():
             return self.getJsonData().values()
         return []
 
-    def verifyUser(self, userName, userPwd):
-        if self.userExist(userName):
-            return self.jsonData[str(userName)]['password'] == userPwd
-        return False
-
+    # -----------------------------------------------------------------------------
+    # user create, update and delete function.
     def addUser(self, userName, userPwd, userType, updateRcd=True):
         userName = str(userName).strip()
         if not self._haveData(): return False 
@@ -71,7 +84,8 @@ class userMgr(JsonLoader):
             if updateRcd: self.updateRcdFile()
             return True            
         return False
-
+    
+#-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 class User(UserMixin):
     """ User object used to get the user info from backend during init.
@@ -79,12 +93,12 @@ class User(UserMixin):
             UserMixin (_type_): _description_
     """
     def __init__(self, id):
-        self.id = id
         self.name = id
-        self.authority = 0
+        self.type = 'user'
+        self.password = None
 
     def __repr__(self):
-        return "%d/%s/%s" % (self.id, self.name, self.email)
+        return "%d/%s/%s" % (self.name, self.type, self.password)
 
 #-----------------------------------------------------------------------------
 # Handle login request.
@@ -105,7 +119,7 @@ def login_post():
         else:
             flash('User password incorrect!')
     else:
-        flash('Login email address does not exit')
+        flash('Login user does not exit!')
     return redirect(url_for('auth.login'))
 
 #-----------------------------------------------------------------------------
