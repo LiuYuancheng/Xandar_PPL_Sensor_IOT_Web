@@ -7,7 +7,7 @@
 {% block mgmContent %}
 <ul class="list-group">
     <li class="list-group-item">
-        <h4> IoT Configuration </h4>
+        <h4> Radar IoT Configuration </h4>
         <p> </p>
     </li>
 
@@ -15,7 +15,10 @@
 
         <h5> Radar Configuration </h5>
         <p> </p>
-
+        <button type="button" class="btn btn-primary">
+            Current radar data fetch interval :  <span class="badge bg-dark"> {{ posts['updateIntv']}} </span> sec
+        </button>
+        <p> </p>
         <form method="POST" action="/changeUpdateIntv">
             <div class="input-group mb-3" style="width: 40%;">
                 <span class="input-group-text"> Input radar data update interval (sec) :</span>
@@ -24,7 +27,7 @@
             </div>
         </form>
 
-        <p> Radar paramter read</p>
+        <p> Radar Paramter Read Setting </p>
         <table class="table table-dark table-bordered">
             <tbody>
                 <tr>
@@ -226,24 +229,33 @@
         <h5> IoT Hub Configuration </h5>
         <p> </p>
 
-        <form method="POST" action="/changeUpdateIntv">
+        <form method="POST" action="/changerptset">
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="reportmd" name="reportmd" value="yes">
-                <label class="form-check-label" for="reportmd">Enable report to hub </label>
-              </div>
-
-
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="xxx.xxx.xxx.xxx" name="newIp">
-                <button class="btn btn-success" type="submit"> Add </button>
+            <div class="input-group mb-3">
+                <span class="badge bg-secondary">Report to IoT Hub : </span> &nbsp
+                <span class="badge bg-bg-dark"> {{ posts['rptHub'] }} </span>
+                <span class="badge bg-secondary">IoT Hub IP address : </span> &nbsp
+                <span class="badge bg-bg-dark"> {{ posts['hubIP'] }} </span>
+                <span class="badge bg-secondary">IoT report time interval (sec) : </span> &nbsp
+                <span class="badge bg-bg-dark"> {{ posts['rptIntv'] }} </span>
+                <div class="form-check form-switch">
+                    {% if posts['rptHub'] %}
+                        <input class="form-check-input" type="checkbox" id="reporthub" name="reporthub" value="yes" checked>
+                        <label class="form-check-label" for="mySwitch"> Report to hub </label>
+                    {% else %}
+                        <input class="form-check-input" type="checkbox" id="reporthub" name="reporthub" value="yes">
+                        <label class="form-check-label" for="mySwitch"> Report to hub </label>
+                    {% endif %}
+                </div>
+                <br>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Input the hub inforamtion</span>
+                    <input type="text" class="form-control" placeholder="Hub IP address" name="hubip">
+                    <input type="text" class="form-control" placeholder="Port Number" name="hubport">
+                    <input type="text" class="form-control" placeholder="Report Interval" name="hubintv">
+                </div>
             </div>
-
-            <div class="input-group mb-3" style="width: 40%;">
-                <span class="input-group-text"> Input radar data update interval (sec) :</span>
-                <input type="number" class="form-control" placeholder="5" name="updateintv" >
-                <button class="btn btn-success" type="submit"> Set </button>
-            </div>
+            <button class="btn btn-success btn-sm" type="submit"> Set </button>
         </form>
 
     </li>

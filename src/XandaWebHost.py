@@ -185,7 +185,10 @@ def setpassword(username):
 @login_required
 def config():
     posts = {'page': 4,
-             'users': gv.iUserMgr.getUserInfo()
+             'updateIntv': gv.gRadarUpdateInterval,
+             'rptHub': gv.gRptHub,
+             'rptIntv': gv.gRptIntv,
+             'hubIP': ':'.join((gv.gRptHubIP, str(gv.gRptHubPort)))
             }
     return render_template('config.html', posts=posts)
 
@@ -199,6 +202,22 @@ def changeUpdateIntv():
             gv.gRadarUpdateInterval = max(1, newIntv)
         except Exception as err:
             flash('Password can not be empty.')
+    return redirect(url_for('config'))
+
+
+@application.route('/changerptset', methods=['POST', ])
+@login_required
+def changerptset():
+    if request.method == 'POST':
+        rptMd = request.form.getlist('reporthub')
+        rptIP = request.form.get("hubip")
+        rptPort = request.form.get("hubport")
+        rptIntv = request.form.get("hubintv")
+        gv.gRptHub =  len(rptMd) > 0 and 'yes' in rptMd
+        if rptIP: gv.gRptHubIP = str(rptIP)
+        if rptPort: gv.gRptHubPort = int(rptPort)
+        if rptIntv: gv.gRptIntv = int(rptIntv)
+
     return redirect(url_for('config'))
 
 # -----------------------------------------------------------------------------

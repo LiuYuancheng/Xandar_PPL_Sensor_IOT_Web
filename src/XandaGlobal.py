@@ -64,6 +64,12 @@ gRadarType = CONFIG_DICT['RADAR_TYPE']
 gRadarPort = CONFIG_DICT['RADAR_PORT'] if 'RADAR_PORT' in CONFIG_DICT.keys() else DE_COMM
 gRadarUpdateInterval = int(CONFIG_DICT['RADAR_UPDATE_INTERVAL']) if 'RADAR_UPDATE_INTERVAL' in CONFIG_DICT.keys() else 1
 
+# Init the radar parameters.
+gRptHub = CONFIG_DICT['RPT_MD']
+gRptIntv = int(CONFIG_DICT['RPT_INT'])
+gRptHubIP = CONFIG_DICT['RPT_SER_IP']
+gRptHubPort = int(CONFIG_DICT['RPT_SER_PORT'])
+
 # Flask App parameters : 
 gflaskHost = 'localhost' if gTestMd else '0.0.0.0'
 gflaskPort = int(CONFIG_DICT['FLASK_SER_PORT']) if 'FLASK_SER_PORT' in CONFIG_DICT.keys() else 5000
