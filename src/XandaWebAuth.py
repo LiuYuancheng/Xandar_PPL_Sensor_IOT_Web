@@ -93,6 +93,7 @@ class User(UserMixin):
             UserMixin (_type_): _description_
     """
     def __init__(self, id):
+        self.id = id
         self.name = id
         self.type = 'user'
         self.password = None

@@ -67,11 +67,16 @@
             <div class="col-sm-2">
                 <img src="{{url_for('static', filename='images/Logo.png')}}" class="rounded" />
             </div>
-            <div class="col-sm-8">
-                <p>This project will create a simple web server to provide the history chart to show the Xandar Kardian People counting sensor data.  So when the engineer are installing the sensor with its IOT gateway. They don't need to use the computer to connect to the sensor directly to check the sensor state. They can login in the web sever running in the  IOT gateway to finish the job.</p>
-                <br>
-                <br>
-                <br>
+            <div class="col-sm-10">
+                <p>This project aims to develop a prototype for an indoor people counting IoT device using the Xandar 
+                  Kardian People Detection Radar and a Raspberry Pi. The device will be network-ready and easily integrated 
+                  with other systems.The Python-based IoT firmware will run on the Raspberry Pi and provide the following 
+                  functionalities:</p>
+                <dl>
+                  <dd> &#149; Read raw data from the people detection radar to determine the number of people in an area.</dd>
+                  <dd> &#149; Offer a web interface for users to view the data and adjust radar parameters.</dd>
+                  <dd> &#149; Provide IoT data access authorization and interfaces for integration with other systems.</dd>
+                </dl>
                 {% if current_user.is_authenticated %}
                     <button class="btn btn-outline-success" type="button"  onclick="location.href='{{ url_for('chart') }}'">Link To IoT Data & Config</button>
                 {% endif %}
@@ -93,6 +98,12 @@
             <dd> &#149; &nbsp Find the Raspberry PI IP address and log in the IoT Page with <b style="font-family: monospace;"> http://<ip>:5000 </b> </dd>
             <dd> &#149; &nbsp After login check the sensor info and change the config to link the IoT to your hub. </dd>
         </dl>
+
+        <button class="btn btn-primary" href="https://github.com/LiuYuancheng/Xandar_PPL_Sensor_IOT_Web">
+            <span class="spinner-grow spinner-grow-sm"></span>
+            Version v2.3 [Project Github link]
+        </button>
+
     </div>
     <div class="col-sm-9">
         <img src="{{url_for('static', filename='images/function.png')}}" class="rounded"/>
