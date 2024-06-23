@@ -1,5 +1,5 @@
 # This is the config file template for the module <c2App.py>
-# Setup the paramter with below format (every line follows <key>:<val> format, the
+# Setup the parameter with below format (every line follows <key>:<val> format, the
 # key can not be changed):
 
 #-----------------------------------------------------------------------------
@@ -9,10 +9,19 @@
 TEST_MD:True
 
 #-----------------------------------------------------------------------------
+# IoT Admin user config and user record file. 
 ADMIN_USER:admin
 ADMIN_PASSWD:admin
+USERS_RCD:users.json
 
 #-----------------------------------------------------------------------------
+# Radar information.
+RADAR_TYPE:CT100
+RADAR_PORT:COM3
+RADAR_UPDATE_INTERVAL:1
+
+#-----------------------------------------------------------------------------
+# IoT Hub configuration.
 RPT_MD:False
 RPT_INT:5
 RPT_SER_IP:127.0.0.1
