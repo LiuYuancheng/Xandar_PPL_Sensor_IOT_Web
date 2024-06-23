@@ -2,7 +2,7 @@
 
 ### Raspberry PI Xandar Kardian IoT People Count Radar
 
-![](doc/img/title.png)
+![](doc/img/Title.png)
 
 **Program Design Purpose**: 
 
@@ -20,7 +20,7 @@ The IoT device program workflow is shown below :
 
 ` Figure-00: IoT device program system diagram, version v2.3 (2024)`
 
-The project's Python IoT firmware code is also modularized and flexible for user to plug their own sensors on Raspberry PI to build different kinds of customized IoT device. 
+The project's Python IoT firmware code is also modularized and flexible for user to plug their own sensors on Raspberry PI to build different kinds of customized IoT device. For the system usage, please refer to the demo video: [Demo Video](https://youtu.be/Tjrk2zAi9co?si=c_6RbUA_PG1ceub_)
 
 ```
 # Created:     2019/09/11 [ rebuilt from v1.5 on 22/06/2024 ]
@@ -32,6 +32,36 @@ The project's Python IoT firmware code is also modularized and flexible for user
 **Table of Contents**
 
 [TOC]
+
+- [People Detection Radar [IoT]](#people-detection-radar--iot-)
+    + [Raspberry PI Xandar Kardian IoT People Count Radar](#raspberry-pi-xandar-kardian-iot-people-count-radar)
+    
+    + [Introduction](#introduction)
+      - [Background Information Introduction](#background-information-introduction)
+      - [Possible Usage Cases](#possible-usage-cases)
+      
+    + [Program Design](#program-design)
+        * [Design of Radar Communication Module](#design-of-radar-communication-module)
+        * [Design of Data Management Module](#design-of-data-management-module)
+        * [Design of User Authorization Module](#design-of-user-authorization-module)
+        * [Design of Web host Module](#design-of-web-host-module)
+        * [Design of Hub Report Module](#design-of-hub-report-module)
+        
+    + [Program Setup](#program-setup)
+        * [Development/Execution Environment](#development-execution-environment)
+        * [Additional Lib/Software Need](#additional-lib-software-need)
+        * [Hardware Need](#hardware-need)
+        * [Program Files List](#program-files-list)
+        
+    + [Program Usage/Execution](#program-usage-execution)
+      - [Run IoT Firmware](#run-iot-firmware)
+      - [Use the Web Interface](#use-the-web-interface)
+      
+    + [Problem and Solution](#problem-and-solution)
+    
+    + [Reference](#reference)
+    
+        
 
 ------
 
