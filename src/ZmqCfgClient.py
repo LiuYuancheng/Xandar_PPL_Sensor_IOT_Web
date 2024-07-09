@@ -1,6 +1,7 @@
 import zmq
 import pickle
 
+#iotIP = '172.23.155.209'
 iotIP = '127.0.0.1'
 port = 3003
 
@@ -9,7 +10,7 @@ print("Connecting to server...")
 socket = context.socket(zmq.REQ)
 #socket.connect ("tcp://localhost:%s" % port)
 socket.connect("tcp://%s:%s" %(iotIP,port))
-print("Sending request ")
+print("Sending request btyes via ZMQ client:")
 #socket.send(b'123')
 configData = {
     'TEST_MD': None , 
@@ -24,8 +25,11 @@ configData = {
 }
 
 pickledata = pickle.dumps(configData, protocol=pickle.HIGHEST_PROTOCOL)
+print(str(pickledata))
 socket.send(pickledata)
 #  Get the reply.
 replyData = socket.recv()
+print("received reply bytes:")
+print(str(replyData))
 reqDict = pickle.loads(replyData)
 print ("Received reply: \n %s" %str(reqDict))
