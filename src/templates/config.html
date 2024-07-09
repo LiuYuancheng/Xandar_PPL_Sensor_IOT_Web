@@ -258,6 +258,15 @@
             <button class="btn btn-success btn-sm" type="submit"> Set </button>
         </form>
 
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <p> Upload the configuration file (only text format file Config_xxx.txt is allowed) : </p>
+            <div class="input-group" style="max-width: 50%;">
+            <input type="file" class="form-control" id="customFile"  name="file" value="Config_new.txt">
+            <input type="submit" value="Upload">
+            </div>
+        </form>
+
+        <br>
     </li>
 </ul>
 {% endblock %}

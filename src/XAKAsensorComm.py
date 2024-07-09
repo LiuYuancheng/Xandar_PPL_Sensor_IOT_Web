@@ -166,7 +166,7 @@ class XAKAsensorComm(threading.Thread):
                     s = serial.Serial(port)
                     s.close()
                     portList.append(port)
-                except (OSError, serial.SerialException):
+                except Exception as error:
                     pass
             print(('COM connection: the serial port can be used :%s' % str(portList)))
         # normally the first comm prot is resoved by the system.
